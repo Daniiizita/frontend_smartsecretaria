@@ -1,0 +1,10 @@
+/* Importa o motor do Tailwind.
+   Ele automaticamente lida com a base, componentes e utilitários.
+   Nenhuma outra configuração é necessária por padrão. */
+@import "tailwindcss";
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
