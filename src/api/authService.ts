@@ -1,11 +1,29 @@
 import apiClient from './axios';
 import type { TokenObtainPair, UserCredentials } from '../types';
+import { config } from '../config/env';
 
 export const login = async (credentials: UserCredentials): Promise<TokenObtainPair> => {
-  console.log('Enviando credenciais para /api/token/:', credentials);
+  if (config.isDevelopment) {
+    console.log('Tentando login com:', { username: credentials.username });
+  }
+  
   const response = await apiClient.post<TokenObtainPair>('/token/', credentials);
-  console.log('Tokens recebidos da API:', response.data);
+  
+  if (config.isDevelopment) {
+    console.log('Login bem-sucedido, tokens recebidos');
+  }
+  
   return response.data;
 };
 
-// No futuro, podemos adicionar funções de logout e refresh token aqui.
+export const logout = () => {
+  localStorage.removeItem(config.storage.accessToken);
+  localStorage.removeItem(config.storage.refreshToken);
+  localStorage.removeItem(config.storage.isAuthenticated);
+  
+  if (config.isDevelopment) {
+    console.log('Logout realizado');
+  }
+};
+
+// No futuro, podemos adicionar funções de refresh token aqui.
