@@ -11,10 +11,17 @@ export const getAlunoById = async (id: number): Promise<Aluno> => {
   return response.data;
 };
 
-export const createAluno = async (aluno: Omit<Aluno, 'id'>): Promise<Aluno> => {
+export const createAluno = async (aluno: Partial<Aluno>): Promise<Aluno> => {
   const response = await apiClient.post<Aluno>('/aluno/', aluno);
   return response.data;
 };
 
-// Adicione aqui as funções para update e delete...
+export const updateAluno = async (id: number, aluno: Partial<Aluno>): Promise<Aluno> => {
+  const response = await apiClient.patch<Aluno>(`/aluno/${id}/`, aluno);
+  return response.data;
+};
+
+export const deleteAluno = async (id: number): Promise<void> => {
+  await apiClient.delete(`/aluno/${id}/`);
+};
 

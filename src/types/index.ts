@@ -1,17 +1,18 @@
 export interface Aluno {
   id: number;
   nome_completo: string;
-  data_nascimento: string; // formato: date
-  nome_pai?: string | null;
-  nome_mae?: string | null;
-  cpf?: string | null;
-  rg?: string | null;
+  data_nascimento: string;
+  nome_pai?: string;
+  nome_mae?: string;
+  cpf?: string;
+  rg?: string;
+  orgao_expedidor: string;
   endereco: string;
   telefone_contato: string;
-  email?: string | null;
-  nome_responsavel?: string | null;
-  foto?: string | null; // formato: uri
+  email?: string;
+  nome_responsavel?: string;
   turma: number;
+  foto?: string | null;
 }
 
 interface UltimoAluno {
@@ -31,7 +32,7 @@ interface UltimaAtividade {
   id: number;
   acao: string;
   data_hora: string;
-  usuario: { username: string; }; // Supondo que o usuário seja um objeto aninhado
+  usuario: { username: string; };
 }
 
 export interface UserCredentials {
@@ -50,5 +51,34 @@ export interface DashboardData {
   ultimas_atividades: UltimaAtividade[];
 }
 
-// Você pode adicionar outras interfaces aqui para Professor, Turma, etc.
-// baseando-se no seu arquivo SmartSecretaria API.yaml
+export interface TokenObtainPair {
+  access: string;
+  refresh: string;
+}
+
+export interface Professor {
+  id: number;
+  nome: string;
+  cpf: string;
+  email: string;
+  telefone_contato: string;
+  data_admissao: string;
+  foto?: string | null;
+  disciplinas: number[];
+}
+
+export interface Turma {
+  id: number;
+  nome: string;
+  serie: number;
+  nivel?: string;
+  turma_letra: string;
+  ano: number;
+  periodo: string;
+  professor_responsavel: number;
+}
+
+export interface SelectOption {
+  value: string | number;
+  label: string;
+}
