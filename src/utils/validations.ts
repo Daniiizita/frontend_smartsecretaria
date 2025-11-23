@@ -42,24 +42,20 @@ export const validateAlunoForm = (
     errors.turma = 'Selecione uma turma';
   }
 
-  // Validação de CPF usando config
   if (data.cpf && data.cpf.replace(/\D/g, '').length > 0) {
     const cpfNumbers = data.cpf.replace(/\D/g, '');
     
     if (config.validation.devMode) {
-      // Modo desenvolvimento: apenas valida tamanho
       if (cpfNumbers.length !== 11) {
         errors.cpf = '🔧 DEV: CPF deve ter 11 dígitos';
       }
     } else {
-      // Modo produção: validação completa
       if (!isValidCPF(data.cpf)) {
         errors.cpf = 'CPF inválido';
       }
     }
   }
 
-  // Validação de RG
   if (data.rg && data.rg.replace(/\D/g, '').length > 0) {
     if (!isValidRG(data.rg)) {
       errors.rg = 'RG deve ter 7 dígitos';
@@ -76,12 +72,14 @@ export const validateAlunoForm = (
 export const validateProfessorForm = (data: any): Record<string, string> => {
   const errors: Record<string, string> = {};
 
+  // Nome
   if (!data.nome?.trim()) {
     errors.nome = 'Nome é obrigatório';
   } else if (data.nome.trim().length < 3) {
     errors.nome = 'Nome deve ter no mínimo 3 caracteres';
   }
 
+  // CPF
   if (!data.cpf) {
     errors.cpf = 'CPF é obrigatório';
   } else {
@@ -89,7 +87,7 @@ export const validateProfessorForm = (data: any): Record<string, string> => {
     
     if (config.validation.devMode) {
       if (cpfNumbers.length !== 11) {
-        errors.cpf = 'DEV: CPF deve ter 11 dígitos';
+        errors.cpf = '🔧 DEV: CPF deve ter 11 dígitos';
       }
     } else {
       if (!isValidCPF(data.cpf)) {
@@ -98,20 +96,50 @@ export const validateProfessorForm = (data: any): Record<string, string> => {
     }
   }
 
+  // RG
+  if (!data.rg) {
+    errors.rg = 'RG é obrigatório';
+  } else if (!isValidRG(data.rg)) {
+    errors.rg = 'RG deve ter 7 dígitos';
+  }
+
+  // Órgão Expedidor
+  if (!data.orgao_expedidor?.trim()) {
+    errors.orgao_expedidor = 'Órgão expedidor é obrigatório';
+  }
+
+  // Data de Nascimento
+  if (!data.data_nascimento) {
+    errors.data_nascimento = 'Data de nascimento é obrigatória';
+  }
+
+  // Endereço
+  if (!data.endereco?.trim()) {
+    errors.endereco = 'Endereço é obrigatório';
+  }
+
+  // Email
   if (!data.email?.trim()) {
     errors.email = 'Email é obrigatório';
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
     errors.email = 'Email inválido';
   }
 
+  // Telefone
   if (!data.telefone_contato?.trim()) {
     errors.telefone_contato = 'Telefone é obrigatório';
   } else if (data.telefone_contato.replace(/\D/g, '').length < 10) {
     errors.telefone_contato = 'Telefone inválido';
   }
 
+  // Data de Admissão
   if (!data.data_admissao) {
     errors.data_admissao = 'Data de admissão é obrigatória';
+  }
+
+  // Naturalidade
+  if (!data.naturalidade?.trim()) {
+    errors.naturalidade = 'Naturalidade é obrigatória';
   }
 
   return errors;

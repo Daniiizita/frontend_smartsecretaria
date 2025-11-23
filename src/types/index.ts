@@ -60,9 +60,14 @@ export interface Professor {
   id: number;
   nome: string;
   cpf: string;
-  email: string;
+  rg: string;
+  orgao_expedidor: string;
+  data_nascimento: string;
+  endereco: string;
   telefone_contato: string;
+  email: string;
   data_admissao: string;
+  naturalidade: string;
   foto?: string | null;
   disciplinas: number[];
 }
@@ -81,4 +86,9 @@ export interface Turma {
 export interface SelectOption {
   value: string | number;
   label: string;
+}
+
+export interface Disciplina {
+  id: number;
+  nome: string;
 }
