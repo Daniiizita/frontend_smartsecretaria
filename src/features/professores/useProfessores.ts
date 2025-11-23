@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Professor } from '../../types';
 import { getProfessores } from '../../api/professorService';
 
@@ -7,20 +7,28 @@ export const useProfessores = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchProfessores = async () => {
-      try {
-        const data = await getProfessores();
-        setProfessores(data);
-      } catch (err) {
-        setError('Falha ao buscar professores.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfessores();
+  const fetchProfessores = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getProfessores();
+      setProfessores(data);
+      setError(null);
+    } catch (err) {
+      setError('Falha ao buscar professores.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { professores, loading, error };
+  useEffect(() => {
+    fetchProfessores();
+  }, [fetchProfessores]);
+
+  return { 
+    professores, 
+    loading, 
+    error,
+    refetch: fetchProfessores 
+  };
 };

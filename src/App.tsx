@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import AlunosPage from './pages/Alunos';
 import AlunoFormPage from './pages/AlunoForm';
 import ProfessoresPage from './pages/Professores';
+import ProfessorFormPage from './pages/ProfessorForm';
 import TurmasPage from './pages/Turmas';
 import TurmaFormPage from './pages/TurmaForm';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -38,6 +39,12 @@ export const App: React.FC = () => {
         {/* Professores */}
         <Route path="/professores" element={
           <ProtectedRoute><ProfessoresPage /></ProtectedRoute>
+        } />
+        <Route path="/professores/novo" element={
+          <ProtectedRoute><ProfessorFormPage /></ProtectedRoute>
+        } />
+        <Route path="/professores/:id" element={
+          <ProtectedRoute><ProfessorFormPage /></ProtectedRoute>
         } />
         
         {/* Turmas */}
