@@ -1,0 +1,38 @@
+services:
+  # Frontend em modo de desenvolvimento
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: smartsecretaria-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000/api
+      - VITE_DEV_MODE=true
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - smartsecretaria-network
+
+  # Frontend em modo de produção
+  frontend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: smartsecretaria-frontend-prod
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000/api
+    networks:
+      - smartsecretaria-network
+    profiles:
+      - production
+
+networks:
+  smartsecretaria-network:
+    driver: bridge
