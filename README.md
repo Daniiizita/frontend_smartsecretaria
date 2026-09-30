@@ -22,11 +22,6 @@ Abra `http://localhost:5173`. Configure a API e CORS de acordo com o ambiente. U
 npm run build
 ```
 
-## Autoria e licenca
+## Autoria e licença
 
 Copyright (c) 2025 Danielle. Os termos de uso estão em [LICENSE](LICENSE). Uso comercial exige autorização prévia por escrito do titular dos direitos. Não inclua credenciais, dados de alunos ou configurações privadas no repositório.
-      // other options...
-    },
-  },
-])
-```
