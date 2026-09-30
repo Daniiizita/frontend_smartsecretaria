@@ -4,7 +4,7 @@ import { RequireGestor } from '../routes/RequireGestor';
 
 const UsuarioFormPage: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className="max-w-4xl mx-auto">
       <RequireGestor>
         <UsuarioForm />
       </RequireGestor>

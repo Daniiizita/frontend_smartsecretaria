@@ -128,7 +128,7 @@ export const UsuarioForm: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
       <div className="flex items-center gap-4 mb-6 pb-4 border-b border-slate-200">
         <button
           type="button"
@@ -138,7 +138,7 @@ export const UsuarioForm: React.FC = () => {
         >
           <ArrowLeft size={24} />
         </button>
-        <h2 className="text-2xl font-bold text-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-800">
           {isEditing ? 'Editar usuário' : 'Novo usuário'}
         </h2>
       </div>
@@ -220,13 +220,13 @@ export const UsuarioForm: React.FC = () => {
               )}
             </div>
 
-            <label className="md:col-span-2 flex items-center gap-3 text-sm text-slate-700">
+            <label className="md:col-span-2 flex items-center gap-3 min-h-11 text-sm text-slate-700 cursor-pointer">
               <input
                 type="checkbox"
                 checked={values.is_active}
                 onChange={(e) => handleChange('is_active', e.target.checked)}
                 disabled={isPropriaConta}
-                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="h-5 w-5 shrink-0 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
               />
               Conta ativa (contas inativas não conseguem entrar no sistema)
             </label>

@@ -54,7 +54,7 @@ export const MeuPerfil: React.FC = () => {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-slate-800">Meu perfil</h1>
 
-      <section className="bg-white rounded-lg shadow-md p-6">
+      <section className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <h2 className="text-lg font-semibold text-slate-700 mb-4">Dados da conta</h2>
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Dado rotulo="Nome" valor={nomeDeExibicao(usuario)} />
@@ -67,7 +67,7 @@ export const MeuPerfil: React.FC = () => {
         </p>
       </section>
 
-      <section className="bg-white rounded-lg shadow-md p-6">
+      <section className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         {sucesso && (
           <div
             className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-700"

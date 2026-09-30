@@ -20,18 +20,18 @@ export const FormSelect: React.FC<FormSelectProps> = ({
   className = '',
   ...selectProps
 }) => {
-  const selectClasses = `flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+  const selectClasses = `flex-1 min-w-0 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
     error 
       ? 'border-red-500 focus:ring-red-500' 
       : 'border-slate-300 focus:ring-blue-500'
   } ${className}`;
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0">
       <label className="block text-sm font-medium text-slate-700 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
-      <div className="flex gap-2">
+      <div className="flex gap-2 min-w-0">
         <select {...selectProps} className={selectClasses}>
           <option value="">Selecione...</option>
           {options.map((opt) => (

@@ -13,7 +13,7 @@ const InicioPage: React.FC = () => {
   if (carregando) return <Carregando />;
   if (!usuario) {
     return (
-      <div className="p-8">
+      <div>
         <Aviso titulo="Sessão não encontrada">Entre novamente para continuar.</Aviso>
       </div>
     );
@@ -21,7 +21,7 @@ const InicioPage: React.FC = () => {
   if (isGestor(usuario)) return <Dashboard />;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div>
       {usuario.tipo === 'professor' && <InicioProfessor usuario={usuario} />}
       {usuario.tipo === 'responsavel' && <InicioResponsavel usuario={usuario} />}
       {usuario.tipo === 'aluno' && (
