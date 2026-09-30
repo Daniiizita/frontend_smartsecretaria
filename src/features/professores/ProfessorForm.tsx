@@ -152,7 +152,7 @@ export const ProfessorForm: React.FC = () => {
           <FormPhone
             label="Telefone"
             required
-            value={values.telefone_contato}
+            value={values.telefone_contato || ''}
             onChange={(value) => handleChange('telefone_contato', value)}
             error={errors.telefone_contato}
           />
