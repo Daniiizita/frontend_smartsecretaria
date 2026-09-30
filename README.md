@@ -40,6 +40,19 @@ npm run build
 
 A integração contínua (GitHub Actions) roda lint, build e `npm audit` a cada push ou pull request para `develop` e `main`.
 
+## Deploy da demonstração
+
+O frontend é publicado na Vercel (`vercel.json` já redireciona as rotas do React para o `index.html`). As variáveis de ambiente ficam no painel da Vercel:
+
+| Variável | Uso |
+| --- | --- |
+| `VITE_API_BASE_URL` | Endereço da API, terminando em `/api` |
+| `VITE_DEMO_MODE` | `true` mostra os botões de demonstração e o aviso de dados fictícios |
+| `VITE_DEMO_PASSWORD` | Senha pública das contas de demo (a mesma `DEMO_PASSWORD` da API) |
+| `VITE_DEV_MODE` | `false` em produção |
+
+O passo a passo completo, junto com a API no Render, está no `DEPLOY.md` do repositório do backend. Não coloque segredos em variáveis `VITE_`: elas vão para o navegador.
+
 ## Autoria e licença
 
 Copyright (c) 2025 Danielle. Os termos de uso estão em [LICENSE](LICENSE). Uso comercial exige autorização prévia por escrito do titular dos direitos. Não inclua credenciais, dados de alunos ou configurações privadas no repositório.

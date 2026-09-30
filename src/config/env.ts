@@ -38,12 +38,22 @@ export const config = {
   // Configurações da API
   api: {
     baseUrl: getEnvVar('VITE_API_BASE_URL', 'http://127.0.0.1:8000/api'),
-    timeout: getNumberEnv('VITE_API_TIMEOUT', 10000),
+    // Folga para o servidor gratuito "acordar" (pode levar até ~1 minuto).
+    timeout: getNumberEnv('VITE_API_TIMEOUT', 60000),
   },
   
+  // Demonstração pública (portfólio): botões de acesso rápido e aviso de dados fictícios.
+  demo: {
+    ativo: getBooleanEnv('VITE_DEMO_MODE', false),
+    // Senha pública das contas de demo (a mesma DEMO_PASSWORD do backend).
+    senha: getEnvVar('VITE_DEMO_PASSWORD', ''),
+  },
+
   // Configurações de validação
   validation: {
     devMode: getBooleanEnv('VITE_DEV_MODE', true),
+    // Dados fictícios da demo não têm CPF/RG válidos: validação só de formato.
+    flexivel: getBooleanEnv('VITE_DEV_MODE', true) || getBooleanEnv('VITE_DEMO_MODE', false),
     strictCPF: !getBooleanEnv('VITE_DEV_MODE', true), // Inverso do dev mode
     strictRG: !getBooleanEnv('VITE_DEV_MODE', true),
   },
