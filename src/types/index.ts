@@ -137,6 +137,16 @@ export interface Matricula {
   status: 'ativo' | 'pendente' | 'cancelado' | 'transferido';
 }
 
+export interface Notificacao {
+  id: number;
+  tipo: 'evento' | 'documento' | 'matricula' | 'sistema';
+  titulo: string;
+  mensagem: string;
+  link: string | null;
+  lida: boolean;
+  criada_em: string;
+}
+
 export interface Documento {
   id: number;
   aluno: number;

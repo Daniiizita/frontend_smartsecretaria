@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { useUsuario } from '../../auth/useUsuario';
 import { TIPO_LABELS, nomeDeExibicao } from '../../auth/papeis';
+import { NotificacoesMenu } from './NotificacoesMenu';
 
 // A navegação fica só na barra lateral (montada por perfil); o cabeçalho mostra quem está logado.
 export const Header: React.FC = () => {
@@ -19,6 +20,8 @@ export const Header: React.FC = () => {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-40">
       <div className="flex justify-end items-center gap-3 p-4">
+        {usuario && <NotificacoesMenu />}
+
         {usuario && (
           <Link
             to="/perfil"

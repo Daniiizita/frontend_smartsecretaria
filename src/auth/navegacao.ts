@@ -21,9 +21,9 @@ export const itensDeMenu = (usuario: Usuario | null): ItemDeMenu[] => {
   if (isGestor(usuario)) {
     return [
       INICIO,
+      { path: '/usuarios', label: 'Usuários', icon: UserCog },
       { path: '/alunos', label: 'Alunos', icon: Users },
       { path: '/professores', label: 'Professores', icon: User },
-      { path: '/usuarios', label: 'Usuários', icon: UserCog },
       MEU_PERFIL,
     ];
   }
