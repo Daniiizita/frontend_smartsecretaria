@@ -167,7 +167,7 @@ export const UsuarioForm: React.FC = () => {
               error={errors.username}
               maxLength={150}
               autoComplete="off"
-              hint="Usado para entrar no sistema."
+              hint="Nome de usuário para entrar no sistema (ex.: maria.silva)."
             />
             <FormInput
               label="Email"
@@ -177,6 +177,7 @@ export const UsuarioForm: React.FC = () => {
               error={errors.email}
               maxLength={254}
               autoComplete="off"
+              hint="Também pode ser usado para entrar. Não pode se repetir entre contas."
             />
             <FormInput
               label="Nome"
