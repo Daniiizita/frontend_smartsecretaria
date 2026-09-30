@@ -11,10 +11,12 @@ import ProfessorFormPage from './pages/ProfessorForm';
 import TurmasPage from './pages/Turmas';
 import TurmaFormPage from './pages/TurmaForm';
 import ProtectedRoute from './routes/ProtectedRoute';
+import { UsuarioProvider } from './auth/UsuarioProvider';
 
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <UsuarioProvider>
       <Routes>
         {/* Rotas Públicas */}
         <Route path="/" element={<HomePage />} />
@@ -58,6 +60,7 @@ export const App: React.FC = () => {
           <ProtectedRoute><TurmaFormPage /></ProtectedRoute>
         } />
       </Routes>
+      </UsuarioProvider>
     </BrowserRouter>
   );
 };

@@ -82,3 +82,30 @@ export interface SelectOption {
   value: string | number;
   label: string;
 }
+
+export type TipoUsuario = 'admin' | 'secretario' | 'professor' | 'aluno' | 'responsavel';
+
+export interface Usuario {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  tipo: TipoUsuario;
+  is_active: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
+  last_login: string | null;
+  date_joined: string;
+}
+
+// Campos que a API aceita ao criar/editar uma conta (a senha nunca volta da API).
+export interface UsuarioPayload {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  tipo?: TipoUsuario;
+  is_active?: boolean;
+  password?: string;
+}

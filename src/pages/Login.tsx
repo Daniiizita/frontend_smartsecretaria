@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/authService';
 import { config } from '../config/env';
+import { useUsuario } from '../auth/useUsuario';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { recarregar } = useUsuario();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +24,8 @@ const LoginPage: React.FC = () => {
       localStorage.setItem(config.storage.accessToken, data.access);
       localStorage.setItem(config.storage.refreshToken, data.refresh);
       localStorage.setItem(config.storage.isAuthenticated, 'true');
-      
+      await recarregar();
+
       navigate('/dashboard');
     } catch (err) {
       console.error('Falha no login:', err);
