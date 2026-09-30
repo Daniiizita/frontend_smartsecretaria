@@ -11,6 +11,7 @@ import { FormInput } from '../../components/common/Form/FormInput';
 import { FormSelect } from '../../components/common/Form/FormSelect';
 import { FormSection } from '../../components/common/Form/FormSection';
 import { FormPhone } from '../../components/common/Form/FormPhone';
+import { ResponsaveisSelect } from '../vinculos/ResponsaveisSelect';
 
 export const AlunoForm: React.FC = () => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export const AlunoForm: React.FC = () => {
       nome_mae: '',
       nome_responsavel: '',
       turma: 0,
+      responsaveis: [],
     },
     onSubmit: async (data) => {
       if (isEditing && id) {
@@ -280,6 +282,15 @@ export const AlunoForm: React.FC = () => {
               autoComplete="off"
             />
           </div>
+        </FormSection>
+
+        {/* Acesso dos responsáveis ao sistema */}
+        <FormSection title="Acesso do Responsável">
+          <ResponsaveisSelect
+            value={values.responsaveis ?? []}
+            onChange={(ids) => handleChange('responsaveis', ids)}
+            error={errors.responsaveis}
+          />
         </FormSection>
 
         {/* Botões */}
