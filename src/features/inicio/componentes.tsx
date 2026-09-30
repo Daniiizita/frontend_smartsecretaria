@@ -8,7 +8,7 @@ export const Avatar: React.FC<{ nome: string; foto?: string | null; tamanho?: 's
   foto,
   tamanho = 'md',
 }) => {
-  const classe = tamanho === 'sm' ? 'h-8 w-8 text-xs' : 'h-14 w-14 text-lg';
+  const classe = `${tamanho === 'sm' ? 'h-8 w-8 text-xs' : 'h-14 w-14 text-lg'} shrink-0`;
   return foto ? (
     <img src={foto} alt={nome} className={`${classe} rounded-full object-cover`} />
   ) : (
