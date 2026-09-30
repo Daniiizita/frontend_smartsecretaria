@@ -45,11 +45,11 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Visão geral da escola</h1>
+    <div>
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6">Visão geral da escola</h1>
 
       {/* Seção de Estatísticas */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
         <StatCard label="Alunos" value={data.total_alunos} icon={<User size={24} />} />
         <StatCard label="Professores" value={data.total_professores} icon={<GraduationCap size={24} />} />
         <StatCard label="Turmas" value={data.total_turmas} icon={<Users size={24} />} />
@@ -57,8 +57,8 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Seção Principal */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="lg:col-span-2 space-y-6 lg:space-y-8">
           <DashboardCard title="Ações Rápidas">
             <div className="flex flex-wrap gap-3">
               <Link to="/alunos/novo" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">Novo Aluno</Link>
@@ -77,7 +77,7 @@ const Dashboard: React.FC = () => {
           </DashboardCard>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 lg:space-y-8">
           <DashboardCard title="Últimos Alunos Cadastrados">
             {data.ultimos_alunos.length > 0 ? (
               <ul className="divide-y divide-slate-100">

@@ -97,7 +97,7 @@ export const NotificacoesMenu: React.FC = () => {
       </button>
 
       {aberto && (
-        <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-lg border border-slate-200 z-50">
+        <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-80 bg-white rounded-lg shadow-lg border border-slate-200 z-50">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
             <h2 className="text-sm font-semibold text-slate-800">Notificações</h2>
             {naoLidas.length > 0 && (

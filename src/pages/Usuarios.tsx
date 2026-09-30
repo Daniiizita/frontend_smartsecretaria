@@ -4,7 +4,7 @@ import { RequireGestor } from '../routes/RequireGestor';
 
 const UsuariosPage: React.FC = () => {
   return (
-    <div className="p-8">
+    <div>
       <RequireGestor>
         <UsuarioList />
       </RequireGestor>

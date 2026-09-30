@@ -77,7 +77,7 @@ export const ProfessorForm: React.FC = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6 pb-4 border-b border-slate-200">
         <button
@@ -87,7 +87,7 @@ export const ProfessorForm: React.FC = () => {
         >
           <ArrowLeft size={24} />
         </button>
-        <h2 className="text-2xl font-bold text-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-800">
           {isEditing ? 'Editar Professor' : 'Novo Professor'}
         </h2>
       </div>
