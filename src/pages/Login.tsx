@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/authService';
 import { config } from '../config/env';
+import { useUsuario } from '../auth/useUsuario';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { recarregar } = useUsuario();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -22,11 +24,12 @@ const LoginPage: React.FC = () => {
       localStorage.setItem(config.storage.accessToken, data.access);
       localStorage.setItem(config.storage.refreshToken, data.refresh);
       localStorage.setItem(config.storage.isAuthenticated, 'true');
-      
+      await recarregar();
+
       navigate('/dashboard');
     } catch (err) {
       console.error('Falha no login:', err);
-      setError('Usuário ou senha inválidos. Por favor, tente novamente.');
+      setError('Usuário/email ou senha inválidos. Por favor, tente novamente.');
       localStorage.clear();
     } finally {
       setLoading(false);
@@ -49,11 +52,14 @@ const LoginPage: React.FC = () => {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="username">
-              Usuário
+              Usuário ou email
             </label>
             <input
               id="username"
               type="text"
+              autoComplete="username"
+              autoCapitalize="none"
+              spellCheck={false}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:shadow-outline"

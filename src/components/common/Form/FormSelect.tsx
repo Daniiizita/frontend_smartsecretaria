@@ -44,7 +44,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
           <button
             type="button"
             onClick={onAddNew}
-            className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex-shrink-0"
+            className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors shrink-0"
             title={addNewLabel}
           >
             <Plus size={20} />

@@ -9,6 +9,7 @@ import { useForm } from '../../hooks/useForm';
 import { FormInput } from '../../components/common/Form/FormInput';
 import { FormSection } from '../../components/common/Form/FormSection';
 import { FormPhone } from '../../components/common/Form/FormPhone';
+import { ContaProfessorSelect } from '../vinculos/ContaProfessorSelect';
 
 export const ProfessorForm: React.FC = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export const ProfessorForm: React.FC = () => {
       telefone_contato: '',
       data_admissao: '',
       disciplinas: [],
+      usuario: null,
     },
     onSubmit: async (data) => {
       if (isEditing && id) {
@@ -156,6 +158,18 @@ export const ProfessorForm: React.FC = () => {
             onChange={(value) => handleChange('telefone_contato', value)}
             error={errors.telefone_contato}
           />
+        </FormSection>
+
+        {/* Acesso ao sistema */}
+        <FormSection title="Acesso ao Sistema">
+          <div className="md:col-span-2 md:max-w-md">
+            <ContaProfessorSelect
+              value={values.usuario}
+              onChange={(usuarioId) => handleChange('usuario', usuarioId)}
+              professorId={isEditing ? Number(id) : undefined}
+              error={errors.usuario}
+            />
+          </div>
         </FormSection>
 
         {/* Botões */}

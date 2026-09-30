@@ -1,5 +1,6 @@
 import apiClient from './axios';
 import type { Professor } from '../types';
+import { semCamposSomenteLeitura } from './payload';
 
 export const getProfessores = async (): Promise<Professor[]> => {
   const response = await apiClient.get<Professor[]>('/professor/');
@@ -12,12 +13,12 @@ export const getProfessorById = async (id: number): Promise<Professor> => {
 };
 
 export const createProfessor = async (professor: Partial<Professor>): Promise<Professor> => {
-  const response = await apiClient.post<Professor>('/professor/', professor);
+  const response = await apiClient.post<Professor>('/professor/', semCamposSomenteLeitura(professor));
   return response.data;
 };
 
 export const updateProfessor = async (id: number, professor: Partial<Professor>): Promise<Professor> => {
-  const response = await apiClient.patch<Professor>(`/professor/${id}/`, professor);
+  const response = await apiClient.patch<Professor>(`/professor/${id}/`, semCamposSomenteLeitura(professor));
   return response.data;
 };
 

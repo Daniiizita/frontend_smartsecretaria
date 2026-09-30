@@ -1,5 +1,6 @@
 import { isValidCPF, isValidRG } from './maskUtils';
 import { config } from '../config/env';
+import type { Professor, Turma } from '../types';
 
 export interface AlunoFormData {
   nome_completo: string;
@@ -10,7 +11,7 @@ export interface AlunoFormData {
   endereco: string;
   telefone_contato: string;
   turma: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const validateAlunoForm = (
@@ -73,7 +74,7 @@ export const validateAlunoForm = (
   return errors;
 };
 
-export const validateProfessorForm = (data: any): Record<string, string> => {
+export const validateProfessorForm = (data: Partial<Professor>): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   if (!data.nome?.trim()) {
@@ -117,7 +118,7 @@ export const validateProfessorForm = (data: any): Record<string, string> => {
   return errors;
 };
 
-export const validateTurmaForm = (data: any): Record<string, string> => {
+export const validateTurmaForm = (data: Partial<Turma>): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   if (!data.serie) {

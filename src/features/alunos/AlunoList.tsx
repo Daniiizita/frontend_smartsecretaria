@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import { useAlunos } from './useAlunos';
-import { Link } from 'react-router-dom';
-import { Plus, Search, Edit, Trash2 } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Plus, Search, Edit } from 'lucide-react';
+import { useUsuario } from '../../auth/useUsuario';
+import { isGestor } from '../../auth/papeis';
 
 export const AlunoList: React.FC = () => {
   const { alunos, loading, error } = useAlunos();
   const [searchTerm, setSearchTerm] = useState('');
+  const [params, setParams] = useSearchParams();
+  const turmaFiltro = Number(params.get('turma')) || null;
+  const { usuario } = useUsuario();
+  const gestao = isGestor(usuario);
 
   const filteredAlunos = alunos.filter(aluno =>
-    aluno.nome_completo.toLowerCase().includes(searchTerm.toLowerCase())
+    aluno.nome_completo.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (turmaFiltro === null || aluno.turma === turmaFiltro)
   );
 
   if (loading) {
@@ -31,15 +38,30 @@ export const AlunoList: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-800">Lista de Alunos</h2>
-        <Link
-          to="/alunos/novo"
-          className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          <Plus size={20} />
-          Novo Aluno
-        </Link>
+        <h2 className="text-2xl font-bold text-slate-800">{gestao ? 'Lista de Alunos' : 'Meus alunos'}</h2>
+        {gestao && (
+          <Link
+            to="/alunos/novo"
+            className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            <Plus size={20} />
+            Novo Aluno
+          </Link>
+        )}
       </div>
+
+      {turmaFiltro !== null && (
+        <div className="flex items-center gap-3 text-sm text-slate-600">
+          <span>Mostrando apenas os alunos de uma turma.</span>
+          <button
+            type="button"
+            onClick={() => setParams({})}
+            className="text-blue-600 hover:underline"
+          >
+            Ver todos
+          </button>
+        </div>
+      )}
 
       {/* Barra de Pesquisa */}
       <div className="relative">
@@ -62,14 +84,16 @@ export const AlunoList: React.FC = () => {
                 Nome
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Email
+                Responsável
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                 Telefone
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Ações
-              </th>
+              {gestao && (
+                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  Ações
+                </th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-slate-200">
@@ -88,19 +112,22 @@ export const AlunoList: React.FC = () => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {aluno.email || '-'}
+                  {aluno.nome_responsavel || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                   {aluno.telefone_contato}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Link to={`/alunos/${aluno.id}`} className="text-blue-600 hover:text-blue-900 mr-3">
-                    <Edit size={18} className="inline" />
-                  </Link>
-                  <button className="text-red-600 hover:text-red-900">
-                    <Trash2 size={18} className="inline" />
-                  </button>
-                </td>
+                {gestao && (
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <Link
+                      to={`/alunos/${aluno.id}`}
+                      className="text-blue-600 hover:text-blue-900"
+                      aria-label={`Editar ${aluno.nome_completo}`}
+                    >
+                      <Edit size={18} className="inline" />
+                    </Link>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

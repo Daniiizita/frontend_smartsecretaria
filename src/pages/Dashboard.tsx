@@ -19,11 +19,10 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('Buscando dados do dashboard...');
         const dashboardData = await getDashboardData();
         setData(dashboardData);
       } catch (err) {
-        setError('Falha ao carregar os dados do dashboard. Verifique se você está logado.');
+        setError('Não foi possível carregar a visão geral da escola. Tente novamente em instantes.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -47,7 +46,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">Visão geral da escola</h1>
 
       {/* Seção de Estatísticas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -65,7 +64,6 @@ const Dashboard: React.FC = () => {
               <Link to="/alunos/novo" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">Novo Aluno</Link>
               <Link to="/professores/novo" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">Novo Professor</Link>
               <Link to="/turmas/nova" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">Nova Turma</Link>
-              <Link to="/matriculas/nova" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">Nova Matrícula</Link>
             </div>
           </DashboardCard>
           <DashboardCard title="Próximos Eventos">

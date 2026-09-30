@@ -14,6 +14,7 @@ export const useAlunos = () => {
         setAlunos(data);
       } catch (err) {
         setError('Falha ao buscar alunos.');
+        console.error(err);
       } finally {
         setLoading(false);
       }

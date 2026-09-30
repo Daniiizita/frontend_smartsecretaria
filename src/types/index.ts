@@ -13,6 +13,7 @@ export interface Aluno {
   nome_responsavel?: string;
   turma: number;
   foto?: string | null;
+  responsaveis?: number[]; // contas de login dos responsáveis
 }
 
 interface UltimoAluno {
@@ -65,6 +66,7 @@ export interface Professor {
   data_admissao: string;
   foto?: string | null;
   disciplinas: number[];
+  usuario?: number | null; // conta de login do professor
 }
 
 export interface Turma {
@@ -81,4 +83,85 @@ export interface Turma {
 export interface SelectOption {
   value: string | number;
   label: string;
+}
+
+export type TipoUsuario = 'admin' | 'secretario' | 'professor' | 'aluno' | 'responsavel';
+
+export interface Usuario {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  tipo: TipoUsuario;
+  is_active: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
+  last_login: string | null;
+  date_joined: string;
+}
+
+// /api/usuarios/me/: a conta logada e os cadastros aos quais está ligada.
+export interface MeuPerfil extends Usuario {
+  professor: number | null;
+  dependentes: number[];
+}
+
+export interface Disciplina {
+  id: number;
+  nome: string;
+}
+
+export interface Atribuicao {
+  id: number;
+  turma: number;
+  disciplina: number;
+  professor: number;
+}
+
+export interface Evento {
+  id: number;
+  titulo: string;
+  descricao?: string | null;
+  data_inicio: string;
+  data_fim: string;
+  tipo: string;
+}
+
+export interface Matricula {
+  id: number;
+  aluno: number;
+  turma: number;
+  ano_letivo: number;
+  data_matricula: string;
+  status: 'ativo' | 'pendente' | 'cancelado' | 'transferido';
+}
+
+export interface Notificacao {
+  id: number;
+  tipo: 'evento' | 'documento' | 'matricula' | 'sistema';
+  titulo: string;
+  mensagem: string;
+  link: string | null;
+  lida: boolean;
+  criada_em: string;
+}
+
+export interface Documento {
+  id: number;
+  aluno: number;
+  tipo: string;
+  data_emissao: string;
+  conteudo: string;
+}
+
+// Campos que a API aceita ao criar/editar uma conta (a senha nunca volta da API).
+export interface UsuarioPayload {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  tipo?: TipoUsuario;
+  is_active?: boolean;
+  password?: string;
 }
