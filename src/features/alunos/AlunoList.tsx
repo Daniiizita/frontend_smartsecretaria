@@ -37,12 +37,12 @@ export const AlunoList: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <h2 className="text-2xl font-bold text-slate-800">{gestao ? 'Lista de Alunos' : 'Meus alunos'}</h2>
         {gestao && (
           <Link
             to="/alunos/novo"
-            className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2.5 rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap"
           >
             <Plus size={20} />
             Novo Aluno
@@ -75,8 +75,41 @@ export const AlunoList: React.FC = () => {
         />
       </div>
 
-      {/* Tabela */}
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+      {/* Celular: cartões (tabela não cabe em 360-400px) */}
+      <ul className="md:hidden space-y-3">
+        {filteredAlunos.map((aluno) => (
+          <li key={aluno.id} className="bg-white rounded-lg shadow-sm p-4 flex items-center gap-3">
+            {aluno.foto ? (
+              <img src={aluno.foto} alt="" className="h-11 w-11 rounded-full object-cover shrink-0" />
+            ) : (
+              <div className="h-11 w-11 rounded-full bg-slate-200 flex items-center justify-center shrink-0" aria-hidden="true">
+                <span className="text-slate-600 font-semibold">{aluno.nome_completo[0]}</span>
+              </div>
+            )}
+            <div className="min-w-0 flex-1">
+              <p className="font-medium text-slate-900 truncate">{aluno.nome_completo}</p>
+              <p className="text-sm text-slate-500 truncate">{aluno.nome_responsavel || 'Responsável não informado'}</p>
+              {aluno.telefone_contato && (
+                <a href={`tel:${aluno.telefone_contato}`} className="inline-flex items-center min-h-11 text-sm text-blue-600">
+                  {aluno.telefone_contato}
+                </a>
+              )}
+            </div>
+            {gestao && (
+              <Link
+                to={`/alunos/${aluno.id}`}
+                className="h-11 w-11 flex items-center justify-center rounded-lg text-blue-600 bg-blue-50 hover:bg-blue-100 shrink-0"
+                aria-label={`Editar ${aluno.nome_completo}`}
+              >
+                <Edit size={20} />
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {/* Tabela (tablet e desktop) */}
+      <div className="hidden md:block bg-white shadow-md rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-slate-200">
           <thead className="bg-slate-50">
             <tr>
@@ -121,7 +154,7 @@ export const AlunoList: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Link
                       to={`/alunos/${aluno.id}`}
-                      className="text-blue-600 hover:text-blue-900"
+                      className="inline-flex p-2 rounded-lg text-blue-600 hover:text-blue-900 hover:bg-blue-50"
                       aria-label={`Editar ${aluno.nome_completo}`}
                     >
                       <Edit size={18} className="inline" />

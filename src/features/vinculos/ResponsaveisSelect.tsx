@@ -60,17 +60,17 @@ export const ResponsaveisSelect: React.FC<Props> = ({ value, onChange, error }) 
             aria-label="Filtrar responsáveis"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
-            className="w-full md:max-w-sm px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full md:max-w-sm px-3 py-2 border border-slate-300 rounded-lg text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <ul className="max-h-48 overflow-y-auto border border-slate-200 rounded-lg divide-y divide-slate-100">
             {visiveis.map((u) => (
               <li key={u.id}>
-                <label className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-slate-50 cursor-pointer">
+                <label className="flex items-center gap-3 px-3 py-2 min-h-11 text-sm hover:bg-slate-50 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={value.includes(u.id)}
                     onChange={() => alternar(u.id)}
-                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                    className="h-5 w-5 shrink-0 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="text-slate-800">{nomeDeExibicao(u)}</span>
                   <span className="text-slate-500">@{u.username}</span>

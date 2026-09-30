@@ -19,7 +19,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
     } ${className}`;
 
     return (
-      <div className="w-full">
+      <div className="w-full min-w-0">
         <label className="block text-sm font-medium text-slate-700 mb-1">
           {label} {required && <span className="text-red-500">*</span>}
         </label>

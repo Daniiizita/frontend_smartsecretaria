@@ -3,7 +3,7 @@ import { AlunoList } from '../features/alunos/AlunoList';
 
 const AlunosPage: React.FC = () => {
   return (
-    <div className="p-8">
+    <div>
       <AlunoList />
     </div>
   );

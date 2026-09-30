@@ -55,6 +55,53 @@ export const UsuarioList: React.FC = () => {
     }
   };
 
+  const selos = (u: Usuario) => [
+    <span key="perfil" className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${CORES_DOS_PERFIS[u.tipo]}`}>
+      {u.is_superuser && <ShieldCheck size={12} aria-label="Superusuário" />}
+      {TIPO_LABELS[u.tipo]}
+    </span>,
+    <span
+      key="status"
+      className={`px-2 py-1 rounded-full text-xs font-medium ${
+        u.is_active ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-600'
+      }`}
+    >
+      {u.is_active ? 'Ativo' : 'Inativo'}
+    </span>,
+  ];
+
+  // No celular os botões ocupam a largura toda e têm 44px de altura (toque confortável).
+  const acoes = (u: Usuario, celular = false) => {
+    if (!podeAlterar(u)) {
+      return (
+        <span className="text-xs text-slate-400">{u.id === logado?.id ? 'Sua conta' : 'Protegido'}</span>
+      );
+    }
+    const tamanho = celular ? 'flex-1 justify-center min-h-11 px-3 py-2' : 'px-3 py-1.5';
+    return (
+      <div className="flex gap-2">
+        <Link
+          to={`/usuarios/${u.id}`}
+          className={`flex items-center gap-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm ${tamanho}`}
+        >
+          <Edit size={14} />
+          Editar
+        </Link>
+        <button
+          type="button"
+          onClick={() => alternarAtivo(u)}
+          disabled={alterandoId === u.id}
+          className={`flex items-center gap-1 rounded-lg transition-colors text-sm disabled:opacity-50 ${tamanho} ${
+            u.is_active ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-700 hover:bg-green-100'
+          }`}
+        >
+          <Power size={14} />
+          {u.is_active ? 'Desativar' : 'Reativar'}
+        </button>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -132,87 +179,61 @@ export const UsuarioList: React.FC = () => {
         </select>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md overflow-x-auto">
-        <table className="min-w-full divide-y divide-slate-200">
-          <thead className="bg-slate-50">
-            <tr>
-              {['Usuário', 'Email', 'Perfil', 'Status', 'Ações'].map((titulo) => (
-                <th
-                  key={titulo}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
-                >
-                  {titulo}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {filtrados.map((u) => (
-              <tr key={u.id} className={u.is_active ? '' : 'bg-slate-50 text-slate-400'}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <p className="font-medium text-slate-900">{nomeDeExibicao(u)}</p>
-                  <p className="text-sm text-slate-500">@{u.username}</p>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                  {u.email || '—'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${CORES_DOS_PERFIS[u.tipo]}`}>
-                    {u.is_superuser && <ShieldCheck size={12} aria-label="Superusuário" />}
-                    {TIPO_LABELS[u.tipo]}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      u.is_active ? 'bg-green-100 text-green-700' : 'bg-slate-200 text-slate-600'
-                    }`}
-                  >
-                    {u.is_active ? 'Ativo' : 'Inativo'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {podeAlterar(u) ? (
-                    <div className="flex gap-2">
-                      <Link
-                        to={`/usuarios/${u.id}`}
-                        className="flex items-center gap-1 bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors text-sm"
-                      >
-                        <Edit size={14} />
-                        Editar
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => alternarAtivo(u)}
-                        disabled={alterandoId === u.id}
-                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg transition-colors text-sm disabled:opacity-50 ${
-                          u.is_active
-                            ? 'bg-red-50 text-red-600 hover:bg-red-100'
-                            : 'bg-green-50 text-green-700 hover:bg-green-100'
-                        }`}
-                      >
-                        <Power size={14} />
-                        {u.is_active ? 'Desativar' : 'Reativar'}
-                      </button>
-                    </div>
-                  ) : (
-                    <span className="text-xs text-slate-400">
-                      {u.id === logado?.id ? 'Sua conta' : 'Protegido'}
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {filtrados.length === 0 && (
+        <div className="text-center py-12 bg-white rounded-lg shadow-md">
+          <p className="text-slate-500">Nenhum usuário encontrado.</p>
+        </div>
+      )}
 
-        {filtrados.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-slate-500">Nenhum usuário encontrado.</p>
-          </div>
-        )}
-      </div>
+      {/* Celular: cartões (a tabela não cabe em 360-400px) */}
+      <ul className="md:hidden space-y-3">
+        {filtrados.map((u) => (
+          <li key={u.id} className={`rounded-lg shadow-sm p-4 space-y-3 ${u.is_active ? 'bg-white' : 'bg-slate-50'}`}>
+            <div className="min-w-0">
+              <p className="font-medium text-slate-900 truncate">{nomeDeExibicao(u)}</p>
+              <p className="text-sm text-slate-500 truncate">@{u.username}</p>
+              {u.email && <p className="text-sm text-slate-600 truncate">{u.email}</p>}
+            </div>
+            <div className="flex flex-wrap gap-2">{selos(u)}</div>
+            {acoes(u, true)}
+          </li>
+        ))}
+      </ul>
+
+      {/* Tabela (tablet e desktop) */}
+      {filtrados.length > 0 && (
+        <div className="hidden md:block bg-white rounded-lg shadow-md overflow-x-auto">
+          <table className="min-w-full divide-y divide-slate-200">
+            <thead className="bg-slate-50">
+              <tr>
+                {['Usuário', 'Email', 'Perfil', 'Status', 'Ações'].map((titulo) => (
+                  <th
+                    key={titulo}
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
+                  >
+                    {titulo}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {filtrados.map((u) => (
+                <tr key={u.id} className={u.is_active ? '' : 'bg-slate-50 text-slate-400'}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <p className="font-medium text-slate-900">{nomeDeExibicao(u)}</p>
+                    <p className="text-sm text-slate-500">@{u.username}</p>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">{u.email || '—'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{selos(u)[0]}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{selos(u)[1]}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{acoes(u)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
