@@ -4,6 +4,7 @@ import { LogOut, Menu } from 'lucide-react';
 import { useUsuario } from '../../auth/useUsuario';
 import { TIPO_LABELS, nomeDeExibicao } from '../../auth/papeis';
 import { NotificacoesMenu } from './NotificacoesMenu';
+import { logout } from '../../api/authService';
 
 interface HeaderProps {
   onAbrirMenu: () => void;
@@ -16,8 +17,8 @@ export const Header: React.FC<HeaderProps> = ({ onAbrirMenu, menuAberto }) => {
   const { usuario, limpar } = useUsuario();
   const nome = usuario ? nomeDeExibicao(usuario) : '';
 
-  const handleLogout = () => {
-    localStorage.clear();
+  const handleLogout = async () => {
+    await logout();
     limpar();
     navigate('/login');
   };
