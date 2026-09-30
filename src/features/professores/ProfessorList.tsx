@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useProfessores } from './useProfessores';
 import { Link } from 'react-router-dom';
-import { Plus, Search, Edit, Trash2, Mail, Phone } from 'lucide-react';
+import { Plus, Search, Edit, Mail, Phone } from 'lucide-react';
 
 export const ProfessorList: React.FC = () => {
   const { professores, loading, error } = useProfessores();
@@ -9,7 +9,7 @@ export const ProfessorList: React.FC = () => {
 
   const filteredProfessores = professores.filter(professor =>
     professor.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    professor.email.toLowerCase().includes(searchTerm.toLowerCase())
+    (professor.email ?? '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -100,11 +100,6 @@ export const ProfessorList: React.FC = () => {
                 <Edit size={16} />
                 Editar
               </Link>
-              <button
-                className="flex items-center justify-center gap-2 bg-red-50 text-red-600 px-3 py-2 rounded-lg hover:bg-red-100 transition-colors text-sm"
-              >
-                <Trash2 size={16} />
-              </button>
             </div>
           </div>
         ))}

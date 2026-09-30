@@ -14,6 +14,7 @@ import UsuariosPage from './pages/Usuarios';
 import UsuarioFormPage from './pages/UsuarioForm';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { UsuarioProvider } from './auth/UsuarioProvider';
+import { RequireGestor } from './routes/RequireGestor';
 
 export const App: React.FC = () => {
   return (
@@ -34,32 +35,32 @@ export const App: React.FC = () => {
           <ProtectedRoute><AlunosPage /></ProtectedRoute>
         } />
         <Route path="/alunos/novo" element={
-          <ProtectedRoute><AlunoFormPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><AlunoFormPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/alunos/:id" element={
-          <ProtectedRoute><AlunoFormPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><AlunoFormPage /></RequireGestor></ProtectedRoute>
         } />
         
         {/* Professores */}
         <Route path="/professores" element={
-          <ProtectedRoute><ProfessoresPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><ProfessoresPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/professores/novo" element={
-          <ProtectedRoute><ProfessorFormPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><ProfessorFormPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/professores/:id" element={
-          <ProtectedRoute><ProfessorFormPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><ProfessorFormPage /></RequireGestor></ProtectedRoute>
         } />
         
         {/* Turmas */}
         <Route path="/turmas" element={
-          <ProtectedRoute><TurmasPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><TurmasPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/turmas/nova" element={
-          <ProtectedRoute><TurmaFormPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><TurmaFormPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/turmas/:id" element={
-          <ProtectedRoute><TurmaFormPage /></ProtectedRoute>
+          <ProtectedRoute><RequireGestor><TurmaFormPage /></RequireGestor></ProtectedRoute>
         } />
 
         {/* Usuários e permissões (gestão escolar) */}

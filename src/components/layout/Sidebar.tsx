@@ -5,13 +5,9 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  LayoutDashboard,
-  Users,
-  User,
-  UserCog,
 } from "lucide-react"; // ícones elegantes e padronizados
 import { useUsuario } from "../../auth/useUsuario";
-import { isGestor } from "../../auth/papeis";
+import { itensDeMenu } from "../../auth/navegacao";
 
 const navLinkClasses =
   "flex items-center gap-3 px-4 py-2 text-slate-100 hover:bg-slate-700 rounded-md transition-colors duration-200";
@@ -69,48 +65,20 @@ export const Sidebar: React.FC = () => {
         </div>
 
         {/* Navegação */}
-        <nav className="flex flex-col space-y-2 mt-6">
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              `${navLinkClasses} ${isActive ? activeNavLinkClasses : ""}`
-            }
-          >
-            <LayoutDashboard size={20} />
-            {!isMinimized && <span>Dashboard</span>}
-          </NavLink>
-
-          <NavLink
-            to="/alunos"
-            className={({ isActive }) =>
-              `${navLinkClasses} ${isActive ? activeNavLinkClasses : ""}`
-            }
-          >
-            <Users size={20} />
-            {!isMinimized && <span>Alunos</span>}
-          </NavLink>
-
-          <NavLink
-            to="/professores"
-            className={({ isActive }) =>
-              `${navLinkClasses} ${isActive ? activeNavLinkClasses : ""}`
-            }
-          >
-            <User size={20} />
-            {!isMinimized && <span>Professores</span>}
-          </NavLink>
-
-          {isGestor(usuario) && (
+        <nav className="flex flex-col space-y-2 mt-6" aria-label="Menu principal">
+          {itensDeMenu(usuario).map(({ path, label, icon: Icon }) => (
             <NavLink
-              to="/usuarios"
+              key={path}
+              to={path}
+              title={isMinimized ? label : undefined}
               className={({ isActive }) =>
                 `${navLinkClasses} ${isActive ? activeNavLinkClasses : ""}`
               }
             >
-              <UserCog size={20} />
-              {!isMinimized && <span>Usuários</span>}
+              <Icon size={20} />
+              {!isMinimized && <span>{label}</span>}
             </NavLink>
-          )}
+          ))}
         </nav>
       </aside>
 
