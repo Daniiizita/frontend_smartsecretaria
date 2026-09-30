@@ -47,10 +47,10 @@ export const validateAlunoForm = (
   if (data.cpf && data.cpf.replace(/\D/g, '').length > 0) {
     const cpfNumbers = data.cpf.replace(/\D/g, '');
     
-    if (config.validation.devMode) {
-      // Modo desenvolvimento: apenas valida tamanho
+    if (config.validation.flexivel) {
+      // Desenvolvimento/demonstração: apenas valida tamanho
       if (cpfNumbers.length !== 11) {
-        errors.cpf = '🔧 DEV: CPF deve ter 11 dígitos';
+        errors.cpf = 'CPF deve ter 11 dígitos';
       }
     } else {
       // Modo produção: validação completa
@@ -88,9 +88,9 @@ export const validateProfessorForm = (data: Partial<Professor>): Record<string, 
   } else {
     const cpfNumbers = data.cpf.replace(/\D/g, '');
     
-    if (config.validation.devMode) {
+    if (config.validation.flexivel) {
       if (cpfNumbers.length !== 11) {
-        errors.cpf = 'DEV: CPF deve ter 11 dígitos';
+        errors.cpf = 'CPF deve ter 11 dígitos';
       }
     } else {
       if (!isValidCPF(data.cpf)) {
