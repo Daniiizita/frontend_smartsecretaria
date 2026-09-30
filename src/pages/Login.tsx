@@ -29,7 +29,7 @@ const LoginPage: React.FC = () => {
       navigate('/dashboard');
     } catch (err) {
       console.error('Falha no login:', err);
-      setError('Usuário ou senha inválidos. Por favor, tente novamente.');
+      setError('Usuário/email ou senha inválidos. Por favor, tente novamente.');
       localStorage.clear();
     } finally {
       setLoading(false);
@@ -52,11 +52,14 @@ const LoginPage: React.FC = () => {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-slate-700 text-sm font-bold mb-2" htmlFor="username">
-              Usuário
+              Usuário ou email
             </label>
             <input
               id="username"
               type="text"
+              autoComplete="username"
+              autoCapitalize="none"
+              spellCheck={false}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:shadow-outline"
