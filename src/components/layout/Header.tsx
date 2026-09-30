@@ -14,13 +14,18 @@ import {
   X,
   Search
 } from 'lucide-react';
+import { useUsuario } from '../../auth/useUsuario';
+import { TIPO_LABELS, nomeDeExibicao } from '../../auth/papeis';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { usuario, limpar } = useUsuario();
+  const nome = usuario ? nomeDeExibicao(usuario) : '';
 
   const handleLogout = () => {
     localStorage.clear();
+    limpar();
     navigate('/login');
   };
 
@@ -93,12 +98,20 @@ export const Header: React.FC = () => {
           </button>
 
           {/* Perfil do Usuário */}
-          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-lg hover:bg-slate-100 cursor-pointer">
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
-              A
+          {usuario && (
+            <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-lg">
+              <div
+                className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold"
+                aria-hidden="true"
+              >
+                {nome.charAt(0).toUpperCase()}
+              </div>
+              <div className="leading-tight">
+                <p className="text-sm text-slate-700">{nome}</p>
+                <p className="text-xs text-slate-500">{TIPO_LABELS[usuario.tipo]}</p>
+              </div>
             </div>
-            <span className="text-sm text-slate-700">Admin</span>
-          </div>
+          )}
 
           {/* Logout */}
           <button
