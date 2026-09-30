@@ -13,6 +13,7 @@ export interface Aluno {
   nome_responsavel?: string;
   turma: number;
   foto?: string | null;
+  responsaveis?: number[]; // contas de login dos responsáveis
 }
 
 interface UltimoAluno {
@@ -65,6 +66,7 @@ export interface Professor {
   data_admissao: string;
   foto?: string | null;
   disciplinas: number[];
+  usuario?: number | null; // conta de login do professor
 }
 
 export interface Turma {
