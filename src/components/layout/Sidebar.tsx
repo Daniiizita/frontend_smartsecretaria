@@ -8,7 +8,10 @@ import {
   LayoutDashboard,
   Users,
   User,
+  UserCog,
 } from "lucide-react"; // ícones elegantes e padronizados
+import { useUsuario } from "../../auth/useUsuario";
+import { isGestor } from "../../auth/papeis";
 
 const navLinkClasses =
   "flex items-center gap-3 px-4 py-2 text-slate-100 hover:bg-slate-700 rounded-md transition-colors duration-200";
@@ -17,6 +20,7 @@ const activeNavLinkClasses = "bg-slate-700";
 export const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [isMinimized, setIsMinimized] = useState(false);
+  const { usuario } = useUsuario();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleMinimize = () => setIsMinimized(!isMinimized);
@@ -95,6 +99,18 @@ export const Sidebar: React.FC = () => {
             <User size={20} />
             {!isMinimized && <span>Professores</span>}
           </NavLink>
+
+          {isGestor(usuario) && (
+            <NavLink
+              to="/usuarios"
+              className={({ isActive }) =>
+                `${navLinkClasses} ${isActive ? activeNavLinkClasses : ""}`
+              }
+            >
+              <UserCog size={20} />
+              {!isMinimized && <span>Usuários</span>}
+            </NavLink>
+          )}
         </nav>
       </aside>
 

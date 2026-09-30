@@ -10,6 +10,8 @@ import ProfessoresPage from './pages/Professores';
 import ProfessorFormPage from './pages/ProfessorForm';
 import TurmasPage from './pages/Turmas';
 import TurmaFormPage from './pages/TurmaForm';
+import UsuariosPage from './pages/Usuarios';
+import UsuarioFormPage from './pages/UsuarioForm';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { UsuarioProvider } from './auth/UsuarioProvider';
 
@@ -58,6 +60,17 @@ export const App: React.FC = () => {
         } />
         <Route path="/turmas/:id" element={
           <ProtectedRoute><TurmaFormPage /></ProtectedRoute>
+        } />
+
+        {/* Usuários e permissões (gestão escolar) */}
+        <Route path="/usuarios" element={
+          <ProtectedRoute><UsuariosPage /></ProtectedRoute>
+        } />
+        <Route path="/usuarios/novo" element={
+          <ProtectedRoute><UsuarioFormPage /></ProtectedRoute>
+        } />
+        <Route path="/usuarios/:id" element={
+          <ProtectedRoute><UsuarioFormPage /></ProtectedRoute>
         } />
       </Routes>
       </UsuarioProvider>
