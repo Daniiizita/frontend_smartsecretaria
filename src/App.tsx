@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import InicioPage from './pages/Inicio';
 import AlunosPage from './pages/Alunos';
 import AlunoFormPage from './pages/AlunoForm';
 import ProfessoresPage from './pages/Professores';
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
 
         {/* Rotas Protegidas */}
         <Route path="/dashboard" element={
-          <ProtectedRoute><Dashboard /></ProtectedRoute>
+          <ProtectedRoute><InicioPage /></ProtectedRoute>
         } />
         
         {/* Alunos */}

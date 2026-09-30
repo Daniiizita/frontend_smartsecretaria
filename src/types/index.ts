@@ -99,6 +99,50 @@ export interface Usuario {
   date_joined: string;
 }
 
+// /api/usuarios/me/: a conta logada e os cadastros aos quais está ligada.
+export interface MeuPerfil extends Usuario {
+  professor: number | null;
+  dependentes: number[];
+}
+
+export interface Disciplina {
+  id: number;
+  nome: string;
+}
+
+export interface Atribuicao {
+  id: number;
+  turma: number;
+  disciplina: number;
+  professor: number;
+}
+
+export interface Evento {
+  id: number;
+  titulo: string;
+  descricao?: string | null;
+  data_inicio: string;
+  data_fim: string;
+  tipo: string;
+}
+
+export interface Matricula {
+  id: number;
+  aluno: number;
+  turma: number;
+  ano_letivo: number;
+  data_matricula: string;
+  status: 'ativo' | 'pendente' | 'cancelado' | 'transferido';
+}
+
+export interface Documento {
+  id: number;
+  aluno: number;
+  tipo: string;
+  data_emissao: string;
+  conteudo: string;
+}
+
 // Campos que a API aceita ao criar/editar uma conta (a senha nunca volta da API).
 export interface UsuarioPayload {
   username?: string;
