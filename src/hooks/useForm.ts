@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { isAxiosError } from 'axios';
 
 interface UseFormOptions<T> {
   initialValues: T;
@@ -6,7 +7,7 @@ interface UseFormOptions<T> {
   validate?: (values: T) => Record<string, string>;
 }
 
-export const useForm = <T extends Record<string, any>>({
+export const useForm = <T extends object>({
   initialValues,
   onSubmit,
   validate,
@@ -15,7 +16,7 @@ export const useForm = <T extends Record<string, any>>({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (name: keyof T, value: any) => {
+  const handleChange = <K extends keyof T>(name: K, value: T[K]) => {
     setValues(prev => ({ ...prev, [name]: value }));
     
     // Limpar erro do campo
@@ -39,13 +40,13 @@ export const useForm = <T extends Record<string, any>>({
     setLoading(true);
     try {
       await onSubmit(values);
-    } catch (error: any) {
-      if (error.response?.data) {
+    } catch (error: unknown) {
+      const data: unknown = isAxiosError(error) ? error.response?.data : undefined;
+      if (data && typeof data === 'object' && !Array.isArray(data)) {
+        // Erros de validação da API: { campo: ["mensagem"] } ou { detail: "mensagem" }.
         const apiErrors: Record<string, string> = {};
-        Object.keys(error.response.data).forEach(key => {
-          apiErrors[key] = Array.isArray(error.response.data[key])
-            ? error.response.data[key][0]
-            : error.response.data[key];
+        Object.entries(data as Record<string, unknown>).forEach(([key, valor]) => {
+          apiErrors[key === 'detail' ? 'general' : key] = String(Array.isArray(valor) ? valor[0] : valor);
         });
         setErrors(apiErrors);
       } else {
