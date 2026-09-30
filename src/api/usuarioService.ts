@@ -1,8 +1,8 @@
 import apiClient from './axios';
-import type { Usuario, UsuarioPayload } from '../types';
+import type { MeuPerfil, Usuario, UsuarioPayload } from '../types';
 
-export const getMe = async (): Promise<Usuario> => {
-  const response = await apiClient.get<Usuario>('/usuarios/me/');
+export const getMe = async (): Promise<MeuPerfil> => {
+  const response = await apiClient.get<MeuPerfil>('/usuarios/me/');
   return response.data;
 };
 

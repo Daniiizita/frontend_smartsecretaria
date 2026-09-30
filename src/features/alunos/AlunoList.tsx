@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAlunos } from './useAlunos';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Plus, Search, Edit } from 'lucide-react';
 import { useUsuario } from '../../auth/useUsuario';
 import { isGestor } from '../../auth/papeis';
@@ -8,11 +8,14 @@ import { isGestor } from '../../auth/papeis';
 export const AlunoList: React.FC = () => {
   const { alunos, loading, error } = useAlunos();
   const [searchTerm, setSearchTerm] = useState('');
+  const [params, setParams] = useSearchParams();
+  const turmaFiltro = Number(params.get('turma')) || null;
   const { usuario } = useUsuario();
   const gestao = isGestor(usuario);
 
   const filteredAlunos = alunos.filter(aluno =>
-    aluno.nome_completo.toLowerCase().includes(searchTerm.toLowerCase())
+    aluno.nome_completo.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (turmaFiltro === null || aluno.turma === turmaFiltro)
   );
 
   if (loading) {
@@ -46,6 +49,19 @@ export const AlunoList: React.FC = () => {
           </Link>
         )}
       </div>
+
+      {turmaFiltro !== null && (
+        <div className="flex items-center gap-3 text-sm text-slate-600">
+          <span>Mostrando apenas os alunos de uma turma.</span>
+          <button
+            type="button"
+            onClick={() => setParams({})}
+            className="text-blue-600 hover:underline"
+          >
+            Ver todos
+          </button>
+        </div>
+      )}
 
       {/* Barra de Pesquisa */}
       <div className="relative">
