@@ -9,13 +9,14 @@ Este repositório é público para apresentação de portfólio. A cobertura de 
 - **Login** por nome de usuário ou email.
 - **Início por perfil**: visão geral da escola para a gestão; "Minhas turmas" para professores; "Meus filhos" (turma, matrícula, professores e documentos) para responsáveis.
 - **Alunos e professores**: listagem para a gestão (com cadastro e edição) e "Meus alunos" para professores, somente com dados pedagógicos.
+- **Turmas**: lista com filtros (ano letivo, nível, período); página da turma com regente, disciplinas e professores (a gestão atribui direto na tela, inclusive "professor único") e alunos; cadastro e edição pela gestão. Professores veem "Minhas turmas", somente leitura.
 - **Usuários e permissões**: contas de acesso e nível de permissão de cada uma, restrito à gestão.
 - **Meu perfil**: dados da conta e troca da própria senha, para todos.
 - **Notificações** no cabeçalho.
 
 O menu e os botões mudam conforme o perfil, mas isso é apenas conveniência de interface: quem garante o acesso é a API, que aplica as permissões em cada endpoint.
 
-Turmas, matrículas, documentos e calendário ainda não têm telas próprias.
+Matrículas, documentos e calendário ainda não têm telas próprias.
 
 ## Executar localmente
 

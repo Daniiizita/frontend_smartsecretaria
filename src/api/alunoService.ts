@@ -2,8 +2,9 @@ import apiClient from './axios';
 import type { Aluno } from '../types';
 import { semCamposSomenteLeitura } from './payload';
 
-export const getAlunos = async (): Promise<Aluno[]> => {
-  const response = await apiClient.get<Aluno[]>('/aluno/');
+// turma (opcional): só os alunos dessa turma.
+export const getAlunos = async (turma?: number): Promise<Aluno[]> => {
+  const response = await apiClient.get<Aluno[]>('/aluno/', { params: turma ? { turma } : undefined });
   return response.data;
 };
 
