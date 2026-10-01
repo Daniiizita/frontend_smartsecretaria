@@ -71,12 +71,27 @@ export interface Professor {
 
 export interface Turma {
   id: number;
-  nome: string;
+  nome: string; // gerado pelo backend a partir de série, letra, período e ano
   serie: number;
-  nivel?: string;
+  serie_label: string;
   turma_letra: string;
   ano: number;
   periodo: string;
+  nivel_ensino_sigla: string;
+  nivel_label: string;
+  horario_aulas?: string | null;
+  professor_responsavel: number; // regente
+  professor_responsavel_nome: string;
+  total_alunos: number;
+}
+
+// Campos que o formulário envia ao criar/editar uma turma.
+export interface TurmaPayload {
+  serie: number;
+  turma_letra: string;
+  periodo: string;
+  ano: number;
+  horario_aulas?: string | null;
   professor_responsavel: number;
 }
 
@@ -116,7 +131,9 @@ export interface Atribuicao {
   id: number;
   turma: number;
   disciplina: number;
+  disciplina_nome: string;
   professor: number;
+  professor_nome: string;
 }
 
 export interface Evento {
