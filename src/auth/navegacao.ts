@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, User, UserCircle, UserCog, Users } from 'lucide-react';
+import { LayoutDashboard, School, User, UserCircle, UserCog, Users } from 'lucide-react';
 import type { Usuario } from '../types';
 import { isGestor } from './papeis';
 
@@ -14,7 +14,7 @@ const MEU_PERFIL: ItemDeMenu = { path: '/perfil', label: 'Meu perfil', icon: Use
 
 /**
  * Menu de cada perfil: só aparece o que a pessoa pode usar.
- * (Módulos sem tela pronta, como turmas e matrículas, ficam fora até existirem.)
+ * (Módulos sem tela pronta, como matrículas, ficam fora até existirem.)
  */
 export const itensDeMenu = (usuario: Usuario | null): ItemDeMenu[] => {
   if (!usuario) return [];
@@ -24,11 +24,17 @@ export const itensDeMenu = (usuario: Usuario | null): ItemDeMenu[] => {
       { path: '/usuarios', label: 'Usuários', icon: UserCog },
       { path: '/alunos', label: 'Alunos', icon: Users },
       { path: '/professores', label: 'Professores', icon: User },
+      { path: '/turmas', label: 'Turmas', icon: School },
       MEU_PERFIL,
     ];
   }
   if (usuario.tipo === 'professor') {
-    return [INICIO, { path: '/alunos', label: 'Meus alunos', icon: Users }, MEU_PERFIL];
+    return [
+      INICIO,
+      { path: '/turmas', label: 'Minhas turmas', icon: School },
+      { path: '/alunos', label: 'Meus alunos', icon: Users },
+      MEU_PERFIL,
+    ];
   }
   if (usuario.tipo === 'responsavel') {
     return [INICIO, MEU_PERFIL];

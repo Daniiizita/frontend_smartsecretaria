@@ -72,7 +72,9 @@ export const InicioProfessor: React.FC<{ usuario: MeuPerfil }> = ({ usuario }) =
               return (
                 <article key={turma.id} className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-4">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-slate-900">{turma.nome}</h3>
+                    <h3 className="font-semibold text-slate-900">
+                      <Link to={`/turmas/${turma.id}`} className="hover:text-blue-700 hover:underline">{turma.nome}</Link>
+                    </h3>
                     {regente && (
                       <span className="inline-flex items-center gap-1 text-xs font-medium bg-blue-100 text-blue-700 px-2 py-1 rounded-full whitespace-nowrap">
                         <Star size={12} /> Regente

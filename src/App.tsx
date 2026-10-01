@@ -10,6 +10,7 @@ import ProfessoresPage from './pages/Professores';
 import ProfessorFormPage from './pages/ProfessorForm';
 import TurmasPage from './pages/Turmas';
 import TurmaFormPage from './pages/TurmaForm';
+import TurmaDetalhePage from './pages/TurmaDetalhe';
 import UsuariosPage from './pages/Usuarios';
 import MeuPerfilPage from './pages/MeuPerfil';
 import UsuarioFormPage from './pages/UsuarioForm';
@@ -55,12 +56,15 @@ export const App: React.FC = () => {
         
         {/* Turmas */}
         <Route path="/turmas" element={
-          <ProtectedRoute><RequireGestor><TurmasPage /></RequireGestor></ProtectedRoute>
+          <ProtectedRoute><TurmasPage /></ProtectedRoute>
         } />
         <Route path="/turmas/nova" element={
           <ProtectedRoute><RequireGestor><TurmaFormPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/turmas/:id" element={
+          <ProtectedRoute><TurmaDetalhePage /></ProtectedRoute>
+        } />
+        <Route path="/turmas/:id/editar" element={
           <ProtectedRoute><RequireGestor><TurmaFormPage /></RequireGestor></ProtectedRoute>
         } />
 

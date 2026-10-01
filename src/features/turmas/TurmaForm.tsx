@@ -1,250 +1,228 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { createTurma } from '../../api/turmaService';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { AlertCircle, ArrowLeft, Loader2, Save } from 'lucide-react';
+import { createTurma, getTurmaById, updateTurma } from '../../api/turmaService';
 import { getProfessores } from '../../api/professorService';
-import type { Turma, Professor } from '../../types';
-import { ArrowLeft, Save, Loader2, AlertCircle } from 'lucide-react';
+import type { Professor, TurmaPayload } from '../../types';
 import { FormInput } from '../../components/common/Form/FormInput';
 import { FormSelect } from '../../components/common/Form/FormSelect';
 import { FormSection } from '../../components/common/Form/FormSection';
 import { useForm } from '../../hooks/useForm';
 import { useTurmaChoices } from '../../hooks/useTurmaChoices';
+import { validateTurmaForm } from '../../utils/validations';
+
+const VALORES_INICIAIS: TurmaPayload = {
+  serie: 0,
+  turma_letra: 'A',
+  periodo: 'Manhã',
+  ano: new Date().getFullYear(),
+  horario_aulas: '',
+  professor_responsavel: 0,
+};
 
 export const TurmaForm: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
-  const [professores, setProfessores] = useState<Professor[]>([]);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const { id } = useParams<{ id: string }>();
+  const isEditing = !!id;
 
+  // Criação a partir do cadastro de aluno: volta para ele com a turma nova selecionada.
+  const returnTo: string | undefined = location.state?.returnTo;
+  const formDataAluno = location.state?.formData;
+  const vindoDoAluno = location.state?.context === 'aluno' && !!returnTo;
+
+  const [professores, setProfessores] = useState<Professor[]>([]);
+  const [carregando, setCarregando] = useState(true);
+  const [falhaAoCarregar, setFalhaAoCarregar] = useState(false);
   const { choices, loading: loadingChoices, error: choicesError } = useTurmaChoices();
 
-  const returnTo = location.state?.returnTo;
-  const formData = location.state?.formData;
-  const context = location.state?.context;
-
-  const { values, errors, loading, handleChange, handleSubmit, setValues } = useForm<Partial<Turma>>({
-    initialValues: {
-      nome: '',
-      serie: 1,
-      nivel: 'EI',
-      turma_letra: 'A',
-      ano: new Date().getFullYear(),
-      periodo: 'Manhã',
-      professor_responsavel: 0,
-    },
-    onSubmit: async (data) => {
-      const novaTurma = await createTurma(data);
-      
-      if (returnTo && context === 'aluno') {
-        navigate(returnTo, {
-          state: {
-            formData: formData,
-            novaTurmaId: novaTurma.id
-          }
-        });
+  const { values, setValues, errors, setErrors, loading, handleChange, handleSubmit } = useForm<TurmaPayload>({
+    initialValues: VALORES_INICIAIS,
+    validate: validateTurmaForm,
+    onSubmit: async (dados) => {
+      const payload = { ...dados, horario_aulas: dados.horario_aulas?.trim() || null };
+      if (isEditing && id) {
+        await updateTurma(Number(id), payload);
+        navigate(`/turmas/${id}`);
+        return;
+      }
+      const nova = await createTurma(payload);
+      if (vindoDoAluno && returnTo) {
+        navigate(returnTo, { state: { formData: formDataAluno, novaTurmaId: nova.id } });
       } else {
-        navigate('/turmas');
+        navigate(`/turmas/${nova.id}`);
       }
     },
   });
 
-  // Função para gerar o nome da turma automaticamente
-  const generateTurmaName = () => {
-    const serieLabel = choices?.serie.find(s => s.value === values.serie)?.label || '';
-    const periodoLabel = values.periodo || '';
-    const turmaLetra = values.turma_letra || '';
-    
-    if (serieLabel && periodoLabel && turmaLetra) {
-      // Extrai apenas a parte relevante da série (ex: "1º Ano" de "1º Ano - Ensino Fundamental I")
-      const serieShort = serieLabel.split(' - ')[0];
-      return `${serieShort} ${turmaLetra} - ${periodoLabel}`;
-    }
-    return '';
-  };
-
-  // Atualiza o nome da turma sempre que os campos relevantes mudarem
   useEffect(() => {
-    if (choices && values.serie && values.turma_letra && values.periodo) {
-      const novoNome = generateTurmaName();
-      if (novoNome !== values.nome) {
-        setValues(prev => ({ ...prev, nome: novoNome }));
-      }
-    }
-  }, [values.serie, values.turma_letra, values.periodo, choices]);
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const carregar = async () => {
       try {
-        const professoresData = await getProfessores();
-        setProfessores(professoresData);
-      } catch (error) {
-        console.error('Erro ao carregar professores:', error);
+        const [lista, turma] = await Promise.all([
+          getProfessores(),
+          isEditing && id ? getTurmaById(Number(id)) : Promise.resolve(null),
+        ]);
+        setProfessores(lista);
+        if (turma) {
+          setValues({
+            serie: turma.serie,
+            turma_letra: turma.turma_letra,
+            periodo: turma.periodo,
+            ano: turma.ano,
+            horario_aulas: turma.horario_aulas ?? '',
+            professor_responsavel: turma.professor_responsavel,
+          });
+        }
+      } catch (err) {
+        console.error('Erro ao carregar dados da turma:', err);
+        setFalhaAoCarregar(true);
+        setErrors({ general: 'Não foi possível carregar os dados da turma.' });
       } finally {
-        setInitialLoading(false);
+        setCarregando(false);
       }
     };
+    carregar();
+  }, [id, isEditing, setValues, setErrors]);
 
-    fetchData();
-  }, []);
-
-  const handleCancel = () => {
-    if (returnTo && context === 'aluno') {
-      navigate(returnTo, { state: { formData } });
-    } else {
-      navigate('/turmas');
-    }
+  const voltar = () => {
+    if (vindoDoAluno && returnTo) navigate(returnTo, { state: { formData: formDataAluno } });
+    else navigate(isEditing ? `/turmas/${id}` : '/turmas');
   };
 
-  if (initialLoading || loadingChoices) {
+  if (carregando || loadingChoices) {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="animate-spin text-blue-500" size={48} />
       </div>
     );
   }
-
   if (choicesError) {
-    return (
-      <div className="p-8">
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          {choicesError}
-        </div>
-      </div>
-    );
+    return <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{choicesError}</div>;
   }
 
-  const professorOptions = professores.map(p => ({ 
-    value: p.id, 
-    label: p.nome 
-  }));
+  // Prévia do nome que o sistema vai gerar (o nome final é calculado pelo backend).
+  const serieLabel = choices?.serie.find((s) => s.value === values.serie)?.label;
+  const previa = serieLabel
+    ? `${serieLabel.split(' - ')[0]} ${values.turma_letra} - ${serieLabel.split(' - ')[1] ?? ''} - ${values.periodo} - ${values.ano}`
+    : '';
+  const erroGeral = errors.general || errors.detail;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-6 pb-4 border-b border-slate-200">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+      <div className="flex items-center gap-3 sm:gap-4 mb-6 pb-4 border-b border-slate-200">
         <button
-          onClick={handleCancel}
+          type="button"
+          onClick={voltar}
           className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
           aria-label="Voltar"
         >
           <ArrowLeft size={24} />
         </button>
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Nova Turma</h2>
-          {context === 'aluno' && (
-            <p className="text-sm text-slate-500 mt-1">
-              Após criar, você retornará ao cadastro de aluno
-            </p>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-800">{isEditing ? 'Editar turma' : 'Nova turma'}</h2>
+          {vindoDoAluno && (
+            <p className="text-sm text-slate-500 mt-1">Depois de criar, você volta ao cadastro do aluno.</p>
           )}
         </div>
       </div>
 
-      {/* Erro Geral */}
-      {errors.general && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-          <AlertCircle size={20} />
-          <span>{errors.general}</span>
+      {erroGeral && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700" role="alert">
+          <AlertCircle size={20} className="shrink-0" />
+          <span>{erroGeral}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <FormSection title="Informações da Turma">
-          {/* Nome gerado automaticamente - apenas exibição */}
-          {values.nome && (
+        <fieldset disabled={falhaAoCarregar || loading} className="space-y-6">
+          <FormSection title="Identificação">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Nome da Turma (gerado automaticamente)
-              </label>
-              <div className="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 font-medium">
-                {values.nome}
-              </div>
+              <FormSelect
+                label="Série"
+                required
+                value={values.serie || ''}
+                onChange={(e) => handleChange('serie', Number(e.target.value))}
+                options={choices?.serie ?? []}
+                error={errors.serie}
+              />
             </div>
-          )}
+            <FormSelect
+              label="Turma (letra)"
+              required
+              value={values.turma_letra}
+              onChange={(e) => handleChange('turma_letra', e.target.value)}
+              options={choices?.turma_letra ?? []}
+              error={errors.turma_letra}
+            />
+            <FormSelect
+              label="Período"
+              required
+              value={values.periodo}
+              onChange={(e) => handleChange('periodo', e.target.value)}
+              options={choices?.periodo ?? []}
+              error={errors.periodo}
+            />
+            <FormInput
+              label="Ano letivo"
+              type="number"
+              inputMode="numeric"
+              required
+              value={values.ano}
+              onChange={(e) => handleChange('ano', Number(e.target.value))}
+              error={errors.ano}
+              min={2000}
+              max={2100}
+            />
+            <FormInput
+              label="Horário das aulas"
+              value={values.horario_aulas ?? ''}
+              onChange={(e) => handleChange('horario_aulas', e.target.value)}
+              error={errors.horario_aulas}
+              maxLength={100}
+              placeholder="Ex.: 7h às 11h30"
+              hint="Opcional."
+            />
+            {previa && (
+              <div className="md:col-span-2">
+                <p className="text-sm font-medium text-slate-700 mb-1">Nome da turma</p>
+                <p className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-700">{previa}</p>
+              </div>
+            )}
+          </FormSection>
 
-          <FormSelect
-            label="Série/Período"
-            required
-            value={values.serie}
-            onChange={(e) => handleChange('serie', Number(e.target.value))}
-            options={choices?.serie || []}
-            error={errors.serie}
-          />
+          <FormSection title="Regência">
+            <div className="md:col-span-2">
+              <FormSelect
+                label="Professor regente"
+                required
+                value={values.professor_responsavel || ''}
+                onChange={(e) => handleChange('professor_responsavel', Number(e.target.value))}
+                options={professores.map((p) => ({ value: p.id, label: p.nome }))}
+                error={errors.professor_responsavel}
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                O regente acompanha a turma. Os professores de cada disciplina são definidos na página da turma.
+              </p>
+            </div>
+          </FormSection>
+        </fieldset>
 
-          <FormSelect
-            label="Nível de Ensino"
-            required
-            value={values.nivel}
-            onChange={(e) => handleChange('nivel', e.target.value)}
-            options={choices?.nivel || []}
-            error={errors.nivel}
-          />
-
-          <FormSelect
-            label="Turma"
-            required
-            value={values.turma_letra}
-            onChange={(e) => handleChange('turma_letra', e.target.value)}
-            options={choices?.turma_letra || []}
-            error={errors.turma_letra}
-          />
-
-          <FormInput
-            label="Ano Letivo"
-            type="number"
-            required
-            value={values.ano}
-            onChange={(e) => handleChange('ano', Number(e.target.value))}
-            error={errors.ano}
-            min={2000}
-            max={2100}
-          />
-
-          <FormSelect
-            label="Período"
-            required
-            value={values.periodo}
-            onChange={(e) => handleChange('periodo', e.target.value)}
-            options={choices?.periodo || []}
-            error={errors.periodo}
-          />
-
-          <FormSelect
-            label="Professor Responsável"
-            required
-            value={values.professor_responsavel}
-            onChange={(e) => handleChange('professor_responsavel', Number(e.target.value))}
-            options={professorOptions}
-            error={errors.professor_responsavel}
-          />
-        </FormSection>
-
-        {/* Botões */}
-        <div className="flex gap-4 pt-4 border-t border-slate-200">
+        <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4 border-t border-slate-200">
           <button
             type="button"
-            onClick={handleCancel}
-            className="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+            onClick={voltar}
+            className="px-6 py-2.5 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
             disabled={loading}
           >
             Cancelar
           </button>
           <button
             type="submit"
-            disabled={loading || !values.nome}
-            className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:bg-blue-300"
+            disabled={loading || falhaAoCarregar}
+            className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:bg-blue-300"
           >
-            {loading ? (
-              <>
-                <Loader2 className="animate-spin" size={20} />
-                Salvando...
-              </>
-            ) : (
-              <>
-                <Save size={20} />
-                {context === 'aluno' ? 'Criar e Prosseguir' : 'Criar Turma'}
-              </>
-            )}
+            {loading ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+            {loading ? 'Salvando...' : isEditing ? 'Salvar alterações' : vindoDoAluno ? 'Criar e voltar ao aluno' : 'Criar turma'}
           </button>
         </div>
       </form>

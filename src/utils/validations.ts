@@ -1,6 +1,6 @@
 import { isValidCPF, isValidRG } from './maskUtils';
 import { config } from '../config/env';
-import type { Professor, Turma } from '../types';
+import type { Professor, TurmaPayload } from '../types';
 
 export interface AlunoFormData {
   nome_completo: string;
@@ -118,7 +118,7 @@ export const validateProfessorForm = (data: Partial<Professor>): Record<string, 
   return errors;
 };
 
-export const validateTurmaForm = (data: Partial<Turma>): Record<string, string> => {
+export const validateTurmaForm = (data: Partial<TurmaPayload>): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   if (!data.serie) {
