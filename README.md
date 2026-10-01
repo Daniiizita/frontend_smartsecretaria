@@ -8,7 +8,8 @@ Este repositório é público para apresentação de portfólio. A cobertura de 
 
 - **Login** por nome de usuário ou email.
 - **Início por perfil**: visão geral da escola para a gestão; "Minhas turmas" para professores; "Meus filhos" (turma, matrícula, professores e documentos) para responsáveis.
-- **Alunos e professores**: listagem para a gestão (com cadastro e edição) e "Meus alunos" para professores, somente com dados pedagógicos.
+- **Alunos e professores**: listas em que tocar no cartão (ou clicar na linha) abre a ficha de visualização, com Visualizar e Editar ao lado; cadastro e edição pela gestão; "Meus alunos" para professores, somente com dados pedagógicos. A ficha do aluno também é aberta pelo responsável, a partir do início.
+- **Dashboard**: os cartões de totais levam às listas correspondentes.
 - **Turmas**: lista com filtros (ano letivo, nível, período); página da turma com regente, disciplinas e professores (a gestão atribui direto na tela, inclusive "professor único") e alunos; cadastro e edição pela gestão. Professores veem "Minhas turmas", somente leitura.
 - **Usuários e permissões**: contas de acesso e nível de permissão de cada uma, restrito à gestão.
 - **Meu perfil**: dados da conta e troca da própria senha, para todos.

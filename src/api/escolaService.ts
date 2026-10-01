@@ -12,11 +12,12 @@ export const getAtribuicoes = async (): Promise<Atribuicao[]> =>
 export const getEventos = async (): Promise<Evento[]> =>
   (await apiClient.get<Evento[]>('/calendario/')).data;
 
-export const getMatriculas = async (): Promise<Matricula[]> =>
-  (await apiClient.get<Matricula[]>('/matricula/')).data;
+// aluno (opcional): só os registros desse aluno.
+export const getMatriculas = async (aluno?: number): Promise<Matricula[]> =>
+  (await apiClient.get<Matricula[]>('/matricula/', { params: aluno ? { aluno } : undefined })).data;
 
-export const getDocumentos = async (): Promise<Documento[]> =>
-  (await apiClient.get<Documento[]>('/documentos/')).data;
+export const getDocumentos = async (aluno?: number): Promise<Documento[]> =>
+  (await apiClient.get<Documento[]>('/documentos/', { params: aluno ? { aluno } : undefined })).data;
 
 export const proximosEventos = (eventos: Evento[], quantidade = 3): Evento[] => {
   const agora = Date.now();

@@ -114,10 +114,14 @@ export const TurmaList: React.FC = () => {
           {filtradas.map((turma) => {
             const regente = usuario?.professor === turma.professor_responsavel;
             return (
-              <li key={turma.id} className="bg-white rounded-lg shadow-md p-4 sm:p-5 flex flex-col gap-3">
+              <li key={turma.id} className="relative bg-white rounded-lg shadow-md hover:shadow-lg hover:ring-1 hover:ring-blue-200 transition p-4 sm:p-5 flex flex-col gap-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <h3 className="font-semibold text-slate-900 text-lg">{tituloCurto(turma)}</h3>
+                    <h3 className="font-semibold text-slate-900 text-lg">
+                      <Link to={`/turmas/${turma.id}`} className="after:absolute after:inset-0 after:rounded-lg">
+                        {tituloCurto(turma)}
+                      </Link>
+                    </h3>
                     <p className="text-sm text-slate-500">{turma.nivel_label}</p>
                   </div>
                   {regente && (
@@ -141,7 +145,7 @@ export const TurmaList: React.FC = () => {
                   <span className="text-slate-500">Regente:</span> {turma.professor_responsavel_nome}
                 </p>
 
-                <div className="mt-auto flex gap-2 pt-2">
+                <div className="relative z-10 mt-auto flex gap-2 pt-2">
                   <Link
                     to={`/turmas/${turma.id}`}
                     className="flex-1 flex items-center justify-center min-h-11 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
