@@ -30,12 +30,14 @@ export const ProfessorForm: React.FC = () => {
       usuario: null,
     },
     onSubmit: async (data) => {
+      // Depois de salvar, abre a visualização do registro.
       if (isEditing && id) {
         await updateProfessor(Number(id), data);
+        navigate(`/professores/${id}`);
       } else {
-        await createProfessor(data);
+        const novo = await createProfessor(data);
+        navigate(`/professores/${novo.id}`);
       }
-      navigate('/professores');
     },
     validate: validateProfessorForm,
   });
@@ -81,7 +83,7 @@ export const ProfessorForm: React.FC = () => {
       {/* Header */}
       <div className="flex items-center gap-4 mb-6 pb-4 border-b border-slate-200">
         <button
-          onClick={() => navigate('/professores')}
+          onClick={() => navigate(isEditing ? `/professores/${id}` : '/professores')}
           className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
           aria-label="Voltar"
         >
@@ -176,7 +178,7 @@ export const ProfessorForm: React.FC = () => {
         <div className="flex gap-4 pt-4 border-t border-slate-200">
           <button
             type="button"
-            onClick={() => navigate('/professores')}
+            onClick={() => navigate(isEditing ? `/professores/${id}` : '/professores')}
             className="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
             disabled={loading}
           >

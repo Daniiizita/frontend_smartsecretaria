@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FileText, GraduationCap } from 'lucide-react';
 import type {
   Aluno, Atribuicao, Disciplina, Documento, Evento, Matricula, MeuPerfil, Professor, Turma,
@@ -85,11 +86,15 @@ export const InicioResponsavel: React.FC<{ usuario: MeuPerfil }> = ({ usuario })
             .sort((a, b) => a.disciplina.localeCompare(b.disciplina));
 
           return (
-            <article key={aluno.id} className="bg-white rounded-lg shadow-md p-6 space-y-5">
+            <article key={aluno.id} className="relative bg-white rounded-lg shadow-md hover:shadow-lg hover:ring-1 hover:ring-blue-200 transition p-4 sm:p-6 space-y-5">
               <header className="flex items-center gap-4">
                 <Avatar nome={aluno.nome_completo} foto={aluno.foto} />
                 <div className="min-w-0">
-                  <h2 className="font-semibold text-slate-900 text-lg">{aluno.nome_completo}</h2>
+                  <h2 className="font-semibold text-slate-900 text-lg">
+                    <Link to={`/alunos/${aluno.id}`} className="after:absolute after:inset-0 after:rounded-lg">
+                      {aluno.nome_completo}
+                    </Link>
+                  </h2>
                   <p className="text-sm text-slate-500">{turma?.nome ?? 'Turma não informada'}</p>
                   {matricula && (
                     <span className={`inline-block mt-1 text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_MATRICULA[matricula.status].cor}`}>

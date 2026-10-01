@@ -6,8 +6,10 @@ import LoginPage from './pages/Login';
 import InicioPage from './pages/Inicio';
 import AlunosPage from './pages/Alunos';
 import AlunoFormPage from './pages/AlunoForm';
+import AlunoDetalhePage from './pages/AlunoDetalhe';
 import ProfessoresPage from './pages/Professores';
 import ProfessorFormPage from './pages/ProfessorForm';
+import ProfessorDetalhePage from './pages/ProfessorDetalhe';
 import TurmasPage from './pages/Turmas';
 import TurmaFormPage from './pages/TurmaForm';
 import TurmaDetalhePage from './pages/TurmaDetalhe';
@@ -40,6 +42,9 @@ export const App: React.FC = () => {
           <ProtectedRoute><RequireGestor><AlunoFormPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/alunos/:id" element={
+          <ProtectedRoute><AlunoDetalhePage /></ProtectedRoute>
+        } />
+        <Route path="/alunos/:id/editar" element={
           <ProtectedRoute><RequireGestor><AlunoFormPage /></RequireGestor></ProtectedRoute>
         } />
         
@@ -51,6 +56,9 @@ export const App: React.FC = () => {
           <ProtectedRoute><RequireGestor><ProfessorFormPage /></RequireGestor></ProtectedRoute>
         } />
         <Route path="/professores/:id" element={
+          <ProtectedRoute><ProfessorDetalhePage /></ProtectedRoute>
+        } />
+        <Route path="/professores/:id/editar" element={
           <ProtectedRoute><RequireGestor><ProfessorFormPage /></RequireGestor></ProtectedRoute>
         } />
         

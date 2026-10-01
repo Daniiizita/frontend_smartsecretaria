@@ -67,6 +67,11 @@ export interface Professor {
   foto?: string | null;
   disciplinas: number[];
   usuario?: number | null; // conta de login do professor
+  rg?: string;
+  orgao_expedidor?: string;
+  data_nascimento?: string;
+  endereco?: string;
+  naturalidade?: string;
 }
 
 export interface Turma {

@@ -11,6 +11,7 @@ import { useUsuario } from '../../auth/useUsuario';
 import { isGestor } from '../../auth/papeis';
 import { DisciplinasDaTurma } from './DisciplinasDaTurma';
 import { tituloCurto } from './formatos';
+import { AcoesDoItem } from '../../components/common/AcoesDoItem';
 
 interface Dados {
   turma: Turma;
@@ -176,25 +177,23 @@ export const TurmaDetalhe: React.FC = () => {
         ) : (
           <ul className="divide-y divide-slate-100">
             {alunos.map((aluno) => (
-              <li key={aluno.id} className="py-2 flex items-center gap-3 min-h-11">
+              <li key={aluno.id} className="relative py-2 flex items-center gap-3 min-h-11 hover:bg-slate-50 rounded-lg px-2 -mx-2">
                 <div className="h-9 w-9 rounded-full bg-slate-200 flex items-center justify-center shrink-0 text-sm font-semibold text-slate-600" aria-hidden="true">
                   {aluno.nome_completo[0]}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-slate-800 truncate">{aluno.nome_completo}</p>
+                  <Link to={`/alunos/${aluno.id}`} className="block text-slate-800 truncate after:absolute after:inset-0 after:rounded-lg">
+                    {aluno.nome_completo}
+                  </Link>
                   {aluno.nome_responsavel && (
                     <p className="text-xs text-slate-500 truncate">Responsável: {aluno.nome_responsavel}</p>
                   )}
                 </div>
-                {gestao && (
-                  <Link
-                    to={`/alunos/${aluno.id}`}
-                    className="h-11 w-11 flex items-center justify-center rounded-lg text-blue-600 hover:bg-blue-50 shrink-0"
-                    aria-label={`Editar ${aluno.nome_completo}`}
-                  >
-                    <Edit size={18} />
-                  </Link>
-                )}
+                <AcoesDoItem
+                  nome={aluno.nome_completo}
+                  verUrl={`/alunos/${aluno.id}`}
+                  editarUrl={gestao ? `/alunos/${aluno.id}/editar` : undefined}
+                />
               </li>
             ))}
           </ul>

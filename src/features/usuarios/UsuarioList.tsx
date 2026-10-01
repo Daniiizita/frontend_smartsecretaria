@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Edit, Plus, Power, Search, ShieldCheck } from 'lucide-react';
 import type { TipoUsuario, Usuario } from '../../types';
 import { updateUsuario } from '../../api/usuarioService';
@@ -13,6 +13,7 @@ type FiltroStatus = 'todos' | 'ativos' | 'inativos';
 export const UsuarioList: React.FC = () => {
   const { usuarios, loading, error, refetch } = useUsuarios();
   const { usuario: logado } = useUsuario();
+  const navigate = useNavigate();
   const [busca, setBusca] = useState('');
   const [filtroTipo, setFiltroTipo] = useState<TipoUsuario | ''>('');
   const [filtroStatus, setFiltroStatus] = useState<FiltroStatus>('todos');
@@ -79,7 +80,7 @@ export const UsuarioList: React.FC = () => {
     }
     const tamanho = celular ? 'flex-1 justify-center min-h-11 px-3 py-2' : 'px-3 py-1.5';
     return (
-      <div className="flex gap-2">
+      <div className="relative z-10 flex gap-2" onClick={(e) => e.stopPropagation()}>
         <Link
           to={`/usuarios/${u.id}`}
           className={`flex items-center gap-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm ${tamanho}`}
@@ -188,9 +189,18 @@ export const UsuarioList: React.FC = () => {
       {/* Celular: cartões (a tabela não cabe em 360-400px) */}
       <ul className="md:hidden space-y-3">
         {filtrados.map((u) => (
-          <li key={u.id} className={`rounded-lg shadow-sm p-4 space-y-3 ${u.is_active ? 'bg-white' : 'bg-slate-50'}`}>
+          <li
+            key={u.id}
+            className={`relative rounded-lg shadow-sm p-4 space-y-3 transition ${u.is_active ? 'bg-white' : 'bg-slate-50'} ${podeAlterar(u) ? 'hover:shadow-md hover:ring-1 hover:ring-blue-200' : ''}`}
+          >
             <div className="min-w-0">
-              <p className="font-medium text-slate-900 truncate">{nomeDeExibicao(u)}</p>
+              {podeAlterar(u) ? (
+                <Link to={`/usuarios/${u.id}`} className="block font-medium text-slate-900 truncate after:absolute after:inset-0 after:rounded-lg">
+                  {nomeDeExibicao(u)}
+                </Link>
+              ) : (
+                <p className="font-medium text-slate-900 truncate">{nomeDeExibicao(u)}</p>
+              )}
               <p className="text-sm text-slate-500 truncate">@{u.username}</p>
               {u.email && <p className="text-sm text-slate-600 truncate">{u.email}</p>}
             </div>
@@ -219,7 +229,11 @@ export const UsuarioList: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filtrados.map((u) => (
-                <tr key={u.id} className={u.is_active ? '' : 'bg-slate-50 text-slate-400'}>
+                <tr
+                  key={u.id}
+                  onClick={podeAlterar(u) ? () => navigate(`/usuarios/${u.id}`) : undefined}
+                  className={`${u.is_active ? '' : 'bg-slate-50 text-slate-400'} ${podeAlterar(u) ? 'cursor-pointer hover:bg-blue-50/50' : ''}`}
+                >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <p className="font-medium text-slate-900">{nomeDeExibicao(u)}</p>
                     <p className="text-sm text-slate-500">@{u.username}</p>
