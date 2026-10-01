@@ -70,10 +70,10 @@ export const InicioProfessor: React.FC<{ usuario: MeuPerfil }> = ({ usuario }) =
               const regente = turma.professor_responsavel === professorId;
               const totalAlunos = dados.alunos.filter((a) => a.turma === turma.id).length;
               return (
-                <article key={turma.id} className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-4">
+                <article key={turma.id} className="relative bg-white rounded-lg shadow-md hover:shadow-lg hover:ring-1 hover:ring-blue-200 transition p-4 sm:p-6 flex flex-col gap-4">
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="font-semibold text-slate-900">
-                      <Link to={`/turmas/${turma.id}`} className="hover:text-blue-700 hover:underline">{turma.nome}</Link>
+                      <Link to={`/turmas/${turma.id}`} className="after:absolute after:inset-0 after:rounded-lg">{turma.nome}</Link>
                     </h3>
                     {regente && (
                       <span className="inline-flex items-center gap-1 text-xs font-medium bg-blue-100 text-blue-700 px-2 py-1 rounded-full whitespace-nowrap">
@@ -89,7 +89,7 @@ export const InicioProfessor: React.FC<{ usuario: MeuPerfil }> = ({ usuario }) =
 
                   <Link
                     to={`/alunos?turma=${turma.id}`}
-                    className="mt-auto flex items-center justify-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors text-sm"
+                    className="relative z-10 mt-auto flex items-center justify-center gap-2 min-h-11 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors text-sm"
                   >
                     <Users size={16} />
                     Ver {totalAlunos} {totalAlunos === 1 ? 'aluno' : 'alunos'}

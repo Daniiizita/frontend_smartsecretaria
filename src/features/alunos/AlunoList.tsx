@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import { useAlunos } from './useAlunos';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Plus, Search, Edit } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Plus, Search } from 'lucide-react';
+import { AcoesDoItem } from '../../components/common/AcoesDoItem';
 import { useUsuario } from '../../auth/useUsuario';
 import { isGestor } from '../../auth/papeis';
+
+const Avatar: React.FC<{ foto?: string | null; nome: string }> = ({ foto, nome }) =>
+  foto ? (
+    <img src={foto} alt="" className="h-11 w-11 rounded-full object-cover shrink-0" />
+  ) : (
+    <div className="h-11 w-11 rounded-full bg-slate-200 flex items-center justify-center shrink-0" aria-hidden="true">
+      <span className="text-slate-600 font-semibold">{nome[0]}</span>
+    </div>
+  );
 
 export const AlunoList: React.FC = () => {
   const { alunos, loading, error } = useAlunos();
@@ -11,6 +21,7 @@ export const AlunoList: React.FC = () => {
   const [params, setParams] = useSearchParams();
   const turmaFiltro = Number(params.get('turma')) || null;
   const { usuario } = useUsuario();
+  const navigate = useNavigate();
   const gestao = isGestor(usuario);
 
   const filteredAlunos = alunos.filter(aluno =>
@@ -75,92 +86,84 @@ export const AlunoList: React.FC = () => {
         />
       </div>
 
-      {/* Celular: cartões (tabela não cabe em 360-400px) */}
+      {/* Celular: cartões. Tocar no cartão abre o aluno; os botões ficam ao lado. */}
       <ul className="md:hidden space-y-3">
         {filteredAlunos.map((aluno) => (
-          <li key={aluno.id} className="bg-white rounded-lg shadow-sm p-4 flex items-center gap-3">
-            {aluno.foto ? (
-              <img src={aluno.foto} alt="" className="h-11 w-11 rounded-full object-cover shrink-0" />
-            ) : (
-              <div className="h-11 w-11 rounded-full bg-slate-200 flex items-center justify-center shrink-0" aria-hidden="true">
-                <span className="text-slate-600 font-semibold">{aluno.nome_completo[0]}</span>
-              </div>
-            )}
+          <li
+            key={aluno.id}
+            className="relative bg-white rounded-lg shadow-sm p-4 flex items-center gap-3 hover:shadow-md hover:ring-1 hover:ring-blue-200 transition"
+          >
+            <Avatar foto={aluno.foto} nome={aluno.nome_completo} />
             <div className="min-w-0 flex-1">
-              <p className="font-medium text-slate-900 truncate">{aluno.nome_completo}</p>
+              {/* O link "estica" sobre o cartão inteiro (after:absolute inset-0). */}
+              <Link
+                to={`/alunos/${aluno.id}`}
+                className="block font-medium text-slate-900 truncate after:absolute after:inset-0 after:rounded-lg"
+              >
+                {aluno.nome_completo}
+              </Link>
               <p className="text-sm text-slate-500 truncate">{aluno.nome_responsavel || 'Responsável não informado'}</p>
               {aluno.telefone_contato && (
-                <a href={`tel:${aluno.telefone_contato}`} className="inline-flex items-center min-h-11 text-sm text-blue-600">
+                <a
+                  href={`tel:${aluno.telefone_contato}`}
+                  className="relative z-10 inline-flex items-center min-h-11 text-sm text-blue-600"
+                >
                   {aluno.telefone_contato}
                 </a>
               )}
             </div>
-            {gestao && (
-              <Link
-                to={`/alunos/${aluno.id}`}
-                className="h-11 w-11 flex items-center justify-center rounded-lg text-blue-600 bg-blue-50 hover:bg-blue-100 shrink-0"
-                aria-label={`Editar ${aluno.nome_completo}`}
-              >
-                <Edit size={20} />
-              </Link>
-            )}
+            <AcoesDoItem
+              nome={aluno.nome_completo}
+              verUrl={`/alunos/${aluno.id}`}
+              editarUrl={gestao ? `/alunos/${aluno.id}/editar` : undefined}
+            />
           </li>
         ))}
       </ul>
 
-      {/* Tabela (tablet e desktop) */}
+      {/* Tablet e desktop: tabela. Clicar na linha abre o aluno. */}
       <div className="hidden md:block bg-white shadow-md rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-slate-200">
           <thead className="bg-slate-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Nome
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Responsável
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Telefone
-              </th>
-              {gestao && (
-                <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
-                  Ações
+              {['Nome', 'Responsável', 'Telefone'].map((titulo) => (
+                <th key={titulo} className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  {titulo}
                 </th>
-              )}
+              ))}
+              <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Ações</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-slate-200">
             {filteredAlunos.map((aluno) => (
-              <tr key={aluno.id} className="hover:bg-slate-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    {aluno.foto ? (
-                      <img src={aluno.foto} alt={aluno.nome_completo} className="h-10 w-10 rounded-full mr-3" />
-                    ) : (
-                      <div className="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center mr-3">
-                        <span className="text-slate-600 font-semibold">{aluno.nome_completo[0]}</span>
-                      </div>
-                    )}
-                    <span className="font-medium text-slate-900">{aluno.nome_completo}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {aluno.nome_responsavel || '-'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {aluno.telefone_contato}
-                </td>
-                {gestao && (
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <tr
+                key={aluno.id}
+                onClick={() => navigate(`/alunos/${aluno.id}`)}
+                className="hover:bg-blue-50/50 cursor-pointer"
+              >
+                <td className="px-6 py-3 whitespace-nowrap">
+                  <div className="flex items-center gap-3">
+                    <Avatar foto={aluno.foto} nome={aluno.nome_completo} />
                     <Link
                       to={`/alunos/${aluno.id}`}
-                      className="inline-flex p-2 rounded-lg text-blue-600 hover:text-blue-900 hover:bg-blue-50"
-                      aria-label={`Editar ${aluno.nome_completo}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="font-medium text-slate-900 hover:text-blue-700 hover:underline"
                     >
-                      <Edit size={18} className="inline" />
+                      {aluno.nome_completo}
                     </Link>
-                  </td>
-                )}
+                  </div>
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-sm text-slate-500">{aluno.nome_responsavel || '-'}</td>
+                <td className="px-6 py-3 whitespace-nowrap text-sm text-slate-500">{aluno.telefone_contato}</td>
+                <td className="px-6 py-3">
+                  <div className="flex justify-end">
+                    <AcoesDoItem
+                      nome={aluno.nome_completo}
+                      verUrl={`/alunos/${aluno.id}`}
+                      editarUrl={gestao ? `/alunos/${aluno.id}/editar` : undefined}
+                    />
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>

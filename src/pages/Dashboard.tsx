@@ -50,9 +50,9 @@ const Dashboard: React.FC = () => {
 
       {/* Seção de Estatísticas */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-        <StatCard label="Alunos" value={data.total_alunos} icon={<User size={24} />} />
-        <StatCard label="Professores" value={data.total_professores} icon={<GraduationCap size={24} />} />
-        <StatCard label="Turmas" value={data.total_turmas} icon={<Users size={24} />} />
+        <StatCard label="Alunos" value={data.total_alunos} icon={<User size={24} />} to="/alunos" />
+        <StatCard label="Professores" value={data.total_professores} icon={<GraduationCap size={24} />} to="/professores" />
+        <StatCard label="Turmas" value={data.total_turmas} icon={<Users size={24} />} to="/turmas" />
         <StatCard label="Matrículas Ativas" value={data.total_matriculas_ativas} icon={<ClipboardList size={24} />} />
       </div>
 
@@ -82,7 +82,11 @@ const Dashboard: React.FC = () => {
             {data.ultimos_alunos.length > 0 ? (
               <ul className="divide-y divide-slate-100">
                 {data.ultimos_alunos.map(aluno => (
-                  <li key={aluno.id} className="py-3">{aluno.nome_completo}</li>
+                  <li key={aluno.id}>
+                    <Link to={`/alunos/${aluno.id}`} className="flex items-center min-h-11 py-2 text-slate-800 hover:text-blue-700 hover:underline">
+                      {aluno.nome_completo}
+                    </Link>
+                  </li>
                 ))}
               </ul>
             ) : <p className="text-slate-500">Nenhum aluno cadastrado recentemente.</p>}
