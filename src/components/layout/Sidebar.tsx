@@ -36,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ abertoNoCelular, onFechar }) =
           bg-slate-800 text-white flex flex-col p-4 space-y-6
           fixed inset-y-0 left-0 lg:static shrink-0
           transition-all duration-300 ease-in-out
-          z-50
+          z-50 print:hidden
         `}
       >
         <div className="flex items-center justify-between px-2">

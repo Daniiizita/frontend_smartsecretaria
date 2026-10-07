@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { isAxiosError } from 'axios';
-import { ArrowLeft, ArrowRightLeft, CheckCircle2, ClipboardList, Edit, Loader2, RotateCcw, Trash2, XCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRightLeft, CheckCircle2, ClipboardList, Edit, FileText, Loader2, RotateCcw, Trash2, XCircle } from 'lucide-react';
 import type { Matricula, StatusMatricula } from '../../types';
 import { deleteMatricula, getMatricula, updateMatricula } from '../../api/matriculaService';
 import { Campo, Campos, Secao } from '../../components/common/Detalhe';
@@ -120,7 +120,13 @@ export const MatriculaDetalhe: React.FC = () => {
               {STATUS[matricula.status].label}
             </span>
           </div>
-          <div className="flex gap-2 shrink-0">
+          <div className="flex flex-wrap gap-2 shrink-0">
+            <Link
+              to={`/documentos/novo?aluno=${matricula.aluno}&tipo=declaracao`}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 min-h-11 px-4 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 text-sm"
+            >
+              <FileText size={16} /> Emitir declaração
+            </Link>
             <Link
               to={`/matriculas/${matricula.id}/editar`}
               className="flex-1 sm:flex-none flex items-center justify-center gap-2 min-h-11 px-4 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 text-sm"

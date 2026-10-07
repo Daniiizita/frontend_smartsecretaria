@@ -8,3 +8,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+/* Impressão (documentos): margens de folha A4. */
+@page {
+  size: A4;
+  margin: 2cm;
+}
