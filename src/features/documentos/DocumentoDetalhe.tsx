@@ -76,7 +76,7 @@ export const DocumentoDetalhe: React.FC = () => {
           <button
             type="button"
             onClick={() => window.print()}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 min-h-11 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
+            className="basis-full sm:basis-auto flex items-center justify-center gap-2 min-h-11 px-4 whitespace-nowrap bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
           >
             <Printer size={16} /> Imprimir / salvar PDF
           </button>
@@ -111,7 +111,7 @@ export const DocumentoDetalhe: React.FC = () => {
 
         <h1 className="text-center text-lg sm:text-xl font-bold uppercase tracking-wide mb-8">{documento.tipo_label}</h1>
 
-        <div className="whitespace-pre-line leading-relaxed text-justify text-base">{documento.conteudo}</div>
+        <div className="whitespace-pre-line leading-relaxed text-left sm:text-justify print:text-justify text-base">{documento.conteudo}</div>
 
         <footer className="mt-20 flex flex-col items-center">
           <div className="w-64 max-w-full border-t border-slate-500 pt-2 text-center text-sm">Secretaria escolar</div>
