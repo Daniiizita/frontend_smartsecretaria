@@ -12,13 +12,14 @@ Este repositório é público para apresentação de portfólio. A cobertura de 
 - **Dashboard**: os cartões de totais levam às listas correspondentes.
 - **Turmas**: lista com filtros (ano letivo, nível, período); página da turma com regente, disciplinas e professores (a gestão atribui direto na tela, inclusive "professor único") e alunos; cadastro e edição pela gestão. Professores veem "Minhas turmas", somente leitura.
 - **Matrículas**: lista com atalhos por situação (ativas, pendentes, canceladas, transferidas), filtros por ano, turma e aluno; página da matrícula com ações rápidas (confirmar, cancelar, transferir, reativar); cadastro a partir da lista ou da ficha do aluno. Uma matrícula vigente por aluno em cada ano letivo; a matrícula ativa define a turma atual do aluno.
+- **Documentos**: emissão de declarações, atestados, históricos, boletins, certificados e outros documentos do aluno, com texto-modelo (declaração e atestado de matrícula prontos; demais tipos com abertura genérica) gerado a partir dos dados do aluno (genérico, de demonstração, revisável antes de emitir); folha pronta para imprimir ou salvar em PDF (A4). Atalhos na página da matrícula e na ficha do aluno; o responsável abre e imprime os documentos dos filhos.
 - **Usuários e permissões**: contas de acesso e nível de permissão de cada uma, restrito à gestão.
 - **Meu perfil**: dados da conta e troca da própria senha, para todos.
 - **Notificações** no cabeçalho.
 
 O menu e os botões mudam conforme o perfil, mas isso é apenas conveniência de interface: quem garante o acesso é a API, que aplica as permissões em cada endpoint.
 
-Documentos e calendário ainda não têm telas próprias.
+O calendário ainda não tem tela própria.
 
 ## Executar localmente
 

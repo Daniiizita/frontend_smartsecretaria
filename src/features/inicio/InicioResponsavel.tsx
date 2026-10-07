@@ -135,9 +135,15 @@ export const InicioResponsavel: React.FC<{ usuario: MeuPerfil }> = ({ usuario })
                 ) : (
                   <ul className="space-y-1">
                     {documentos.map((doc) => (
-                      <li key={doc.id} className="flex justify-between gap-4 text-sm">
-                        <span className="text-slate-800">{TIPO_DOCUMENTO[doc.tipo] ?? doc.tipo}</span>
-                        <span className="text-slate-500 whitespace-nowrap">{formatarData(doc.data_emissao)}</span>
+                      <li key={doc.id}>
+                        {/* Acima do link do cartão (z-10): abre a folha do documento */}
+                        <Link
+                          to={`/documentos/${doc.id}`}
+                          className="relative z-10 flex justify-between items-center gap-4 min-h-11 text-sm rounded-lg hover:bg-slate-50 px-2 -mx-2"
+                        >
+                          <span className="text-blue-700">{TIPO_DOCUMENTO[doc.tipo] ?? doc.tipo}</span>
+                          <span className="text-slate-500 whitespace-nowrap">{formatarData(doc.data_emissao)}</span>
+                        </Link>
                       </li>
                     ))}
                   </ul>
