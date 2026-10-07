@@ -13,6 +13,9 @@ import ProfessorDetalhePage from './pages/ProfessorDetalhe';
 import TurmasPage from './pages/Turmas';
 import TurmaFormPage from './pages/TurmaForm';
 import TurmaDetalhePage from './pages/TurmaDetalhe';
+import MatriculasPage from './pages/Matriculas';
+import MatriculaDetalhePage from './pages/MatriculaDetalhe';
+import MatriculaFormPage from './pages/MatriculaForm';
 import UsuariosPage from './pages/Usuarios';
 import MeuPerfilPage from './pages/MeuPerfil';
 import UsuarioFormPage from './pages/UsuarioForm';
@@ -75,6 +78,12 @@ export const App: React.FC = () => {
         <Route path="/turmas/:id/editar" element={
           <ProtectedRoute><RequireGestor><TurmaFormPage /></RequireGestor></ProtectedRoute>
         } />
+
+        {/* Matrículas (gestão escolar) */}
+        <Route path="/matriculas" element={<ProtectedRoute><MatriculasPage /></ProtectedRoute>} />
+        <Route path="/matriculas/nova" element={<ProtectedRoute><MatriculaFormPage /></ProtectedRoute>} />
+        <Route path="/matriculas/:id" element={<ProtectedRoute><MatriculaDetalhePage /></ProtectedRoute>} />
+        <Route path="/matriculas/:id/editar" element={<ProtectedRoute><MatriculaFormPage /></ProtectedRoute>} />
 
         {/* Perfil do usuário logado (todos os perfis) */}
         <Route path="/perfil" element={

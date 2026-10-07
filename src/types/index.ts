@@ -150,13 +150,26 @@ export interface Evento {
   tipo: string;
 }
 
+export type StatusMatricula = 'ativo' | 'pendente' | 'cancelado' | 'transferido';
+
 export interface Matricula {
   id: number;
+  aluno: number;
+  aluno_nome: string;
+  turma: number;
+  turma_nome: string;
+  ano_letivo: number;
+  data_matricula: string;
+  status: StatusMatricula;
+  status_label: string;
+}
+
+export interface MatriculaPayload {
   aluno: number;
   turma: number;
   ano_letivo: number;
   data_matricula: string;
-  status: 'ativo' | 'pendente' | 'cancelado' | 'transferido';
+  status: StatusMatricula;
 }
 
 export interface Notificacao {
