@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
         <StatCard label="Alunos" value={data.total_alunos} icon={<User size={24} />} to="/alunos" />
         <StatCard label="Professores" value={data.total_professores} icon={<GraduationCap size={24} />} to="/professores" />
         <StatCard label="Turmas" value={data.total_turmas} icon={<Users size={24} />} to="/turmas" />
-        <StatCard label="Matrículas Ativas" value={data.total_matriculas_ativas} icon={<ClipboardList size={24} />} />
+        <StatCard label="Matrículas Ativas" value={data.total_matriculas_ativas} icon={<ClipboardList size={24} />} to="/matriculas?status=ativo" />
       </div>
 
       {/* Seção Principal */}

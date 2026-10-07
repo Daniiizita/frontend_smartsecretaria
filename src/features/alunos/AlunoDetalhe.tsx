@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { isAxiosError } from 'axios';
-import { ArrowLeft, ClipboardList, Edit, FileText, Home, Loader2, School, User } from 'lucide-react';
+import { ArrowLeft, ClipboardList, Edit, FileText, Home, Loader2, Plus, School, User } from 'lucide-react';
 import type { Aluno, Documento, Matricula, Turma } from '../../types';
 import { getAlunoById } from '../../api/alunoService';
 import { getTurmaById } from '../../api/turmaService';
@@ -155,19 +155,52 @@ export const AlunoDetalhe: React.FC = () => {
         </Campos>
       </Secao>
 
-      {matriculas.length > 0 && (
-        <Secao titulo="Matrículas" icone={ClipboardList}>
-          <ul className="divide-y divide-slate-100">
-            {matriculas.map((m) => (
-              <li key={m.id} className="py-2 flex flex-wrap items-center justify-between gap-2">
-                <span className="text-slate-800">Ano letivo {m.ano_letivo}</span>
-                <span className="text-sm text-slate-500">desde {formatDateToBR(m.data_matricula)}</span>
-                <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_MATRICULA[m.status].cor}`}>
-                  {STATUS_MATRICULA[m.status].label}
-                </span>
-              </li>
-            ))}
-          </ul>
+      {(matriculas.length > 0 || gestao) && (
+        <Secao
+          titulo="Matrículas"
+          icone={ClipboardList}
+          acao={
+            gestao && (
+              <Link
+                to={`/matriculas/nova?aluno=${aluno.id}`}
+                className="flex items-center gap-1 min-h-11 px-3 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100"
+              >
+                <Plus size={16} /> Nova matrícula
+              </Link>
+            )
+          }
+        >
+          {matriculas.length === 0 ? (
+            <p className="text-sm text-slate-500">Nenhuma matrícula registrada.</p>
+          ) : (
+            <ul className="divide-y divide-slate-100">
+              {matriculas.map((m) => {
+                const conteudo = (
+                  <>
+                    <span className="text-slate-800">Ano letivo {m.ano_letivo}</span>
+                    <span className="text-sm text-slate-500">desde {formatDateToBR(m.data_matricula)}</span>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_MATRICULA[m.status].cor}`}>
+                      {STATUS_MATRICULA[m.status].label}
+                    </span>
+                  </>
+                );
+                return (
+                  <li key={m.id}>
+                    {gestao ? (
+                      <Link
+                        to={`/matriculas/${m.id}`}
+                        className="py-2 min-h-11 flex flex-wrap items-center justify-between gap-2 hover:bg-slate-50 rounded-lg px-2 -mx-2"
+                      >
+                        {conteudo}
+                      </Link>
+                    ) : (
+                      <div className="py-2 flex flex-wrap items-center justify-between gap-2">{conteudo}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </Secao>
       )}
 
