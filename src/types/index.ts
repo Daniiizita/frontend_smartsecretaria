@@ -182,10 +182,24 @@ export interface Notificacao {
   criada_em: string;
 }
 
+export type TipoDocumento =
+  | 'historico' | 'declaracao' | 'boletim' | 'atestado' | 'certificado' | 'contagem' | 'ata' | 'outros';
+
 export interface Documento {
   id: number;
   aluno: number;
-  tipo: string;
+  aluno_nome: string;
+  tipo: TipoDocumento;
+  tipo_label: string;
+  data_emissao: string;
+  conteudo: string;
+  escola_nome: string; // cabeçalho da folha impressa
+  escola_cidade: string;
+}
+
+export interface DocumentoPayload {
+  aluno: number;
+  tipo: TipoDocumento;
   data_emissao: string;
   conteudo: string;
 }

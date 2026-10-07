@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ onAbrirMenu, menuAberto }) => {
   };
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-30">
+    <header className="bg-white shadow-sm sticky top-0 z-30 print:hidden">
       <div className="flex items-center gap-3 p-4">
         <button
           type="button"

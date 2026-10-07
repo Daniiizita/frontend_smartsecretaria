@@ -204,16 +204,38 @@ export const AlunoDetalhe: React.FC = () => {
         </Secao>
       )}
 
-      {documentos.length > 0 && (
-        <Secao titulo="Documentos" icone={FileText}>
-          <ul className="divide-y divide-slate-100">
-            {documentos.map((d) => (
-              <li key={d.id} className="py-2 flex justify-between gap-4">
-                <span className="text-slate-800">{TIPO_DOCUMENTO[d.tipo] ?? d.tipo}</span>
-                <span className="text-sm text-slate-500 whitespace-nowrap">{formatDateToBR(d.data_emissao)}</span>
-              </li>
-            ))}
-          </ul>
+      {(documentos.length > 0 || gestao) && (
+        <Secao
+          titulo="Documentos"
+          icone={FileText}
+          acao={
+            gestao && (
+              <Link
+                to={`/documentos/novo?aluno=${aluno.id}`}
+                className="flex items-center gap-1 min-h-11 px-3 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100"
+              >
+                <Plus size={16} /> Emitir documento
+              </Link>
+            )
+          }
+        >
+          {documentos.length === 0 ? (
+            <p className="text-sm text-slate-500">Nenhum documento emitido.</p>
+          ) : (
+            <ul className="divide-y divide-slate-100">
+              {documentos.map((d) => (
+                <li key={d.id}>
+                  <Link
+                    to={`/documentos/${d.id}`}
+                    className="py-2 min-h-11 flex justify-between items-center gap-4 hover:bg-slate-50 rounded-lg px-2 -mx-2"
+                  >
+                    <span className="text-blue-700">{TIPO_DOCUMENTO[d.tipo] ?? d.tipo}</span>
+                    <span className="text-sm text-slate-500 whitespace-nowrap">{formatDateToBR(d.data_emissao)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </Secao>
       )}
 
