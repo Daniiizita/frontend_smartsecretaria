@@ -1,29 +1,56 @@
-# SmartSecretaria
+# SmartSecretaria (Frontend)
 
-Frontend do SmartSecretaria, uma aplicação de gestão escolar em desenvolvimento. Construído com React, TypeScript e Vite, consome a API Django do projeto.
+The web client for SmartSecretaria, a school-management system. It gives school staff, teachers and guardians a role-aware interface for students, classes, enrollments and official documents, backed by a Django REST API.
 
-Este repositório é público para apresentação de portfólio. A cobertura de telas ainda não corresponde a todos os módulos da API, e o produto não está pronto para produção.
+> **Status:** portfolio project under active development, public for presentation purposes. Screen coverage does not yet match every module in the API, and the product is not production-ready. Use fictional data only.
 
-## Telas atuais
+Backend repository: [backend_smartsecretaria](https://github.com/Daniiizita/backend_smartsecretaria) (Django + Django REST Framework).
 
-- **Login** por nome de usuário ou email.
-- **Início por perfil**: visão geral da escola para a gestão; "Minhas turmas" para professores; "Meus filhos" (turma, matrícula, professores e documentos) para responsáveis.
-- **Alunos e professores**: listas em que tocar no cartão (ou clicar na linha) abre a ficha de visualização, com Visualizar e Editar ao lado; cadastro e edição pela gestão; "Meus alunos" para professores, somente com dados pedagógicos. A ficha do aluno também é aberta pelo responsável, a partir do início.
-- **Dashboard**: os cartões de totais levam às listas correspondentes.
-- **Turmas**: lista com filtros (ano letivo, nível, período); página da turma com regente, disciplinas e professores (a gestão atribui direto na tela, inclusive "professor único") e alunos; cadastro e edição pela gestão. Professores veem "Minhas turmas", somente leitura.
-- **Matrículas**: lista com atalhos por situação (ativas, pendentes, canceladas, transferidas), filtros por ano, turma e aluno; página da matrícula com ações rápidas (confirmar, cancelar, transferir, reativar); cadastro a partir da lista ou da ficha do aluno. Uma matrícula vigente por aluno em cada ano letivo; a matrícula ativa define a turma atual do aluno.
-- **Documentos**: emissão de declarações, atestados, históricos, boletins, certificados e outros documentos do aluno, com texto-modelo (declaração e atestado de matrícula prontos; demais tipos com abertura genérica) gerado a partir dos dados do aluno (genérico, de demonstração, revisável antes de emitir); folha pronta para imprimir ou salvar em PDF (A4). Atalhos na página da matrícula e na ficha do aluno; o responsável abre e imprime os documentos dos filhos.
-- **Usuários e permissões**: contas de acesso e nível de permissão de cada uma, restrito à gestão.
-- **Meu perfil**: dados da conta e troca da própria senha, para todos.
-- **Notificações** no cabeçalho.
+The user interface is in Brazilian Portuguese.
 
-O menu e os botões mudam conforme o perfil, mas isso é apenas conveniência de interface: quem garante o acesso é a API, que aplica as permissões em cada endpoint.
+## Tech stack
 
-O calendário ainda não tem tela própria.
+| Area | Technology |
+| --- | --- |
+| UI | React 19, TypeScript 5.9 |
+| Build tool | Vite (via `rolldown-vite`), React Compiler Babel plugin |
+| Routing | React Router 7 |
+| Styling | Tailwind CSS 4, `lucide-react` icons |
+| HTTP | Axios (with request/response interceptors) |
+| Linting | ESLint 9 + `typescript-eslint` |
+| CI | GitHub Actions: lint, build and `npm audit` (Node 22) |
+| Hosting (demo) | Vercel |
 
-## Executar localmente
+## Key features
 
-Requer Node.js e uma API local em `http://127.0.0.1:8000`.
+- **Login** with username or email.
+- **Role-based home screen**: a school overview for staff, "My classes" for teachers, and "My children" (class, enrollment, teachers and documents) for guardians.
+- **Students and teachers**: lists with detail pages; create and edit for school staff; a "My students" view for teachers showing pedagogical data only.
+- **Dashboard** with summary cards that link to the matching lists.
+- **Classes**: filters by school year, level and period; a class page with the homeroom teacher, subjects, teachers and students; staff can assign teachers directly on the page.
+- **Enrollments**: shortcuts by status (active, pending, cancelled, transferred), filters by year, class and student, and quick actions (confirm, cancel, transfer, reactivate). One active enrollment per student per school year; the active enrollment defines the student's current class.
+- **Documents**: issue enrollment declarations, certificates, transcripts, report cards and other student documents from templates filled with the student's data, reviewable before issuing, in a print-ready A4 layout that can be saved as PDF. Guardians can open and print their children's documents.
+- **Users and permissions**: manage accounts and permission levels (staff only).
+- **My profile**: account details and password change for every user.
+- **Notifications** in the header.
+
+The calendar does not have its own screen yet.
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 22 (the version used in CI)
+- The [backend API](https://github.com/Daniiizita/backend_smartsecretaria) running locally at `http://127.0.0.1:8000`, with CORS allowing `http://localhost:5173` (the backend's default)
+
+### Install and run
+
+```bash
+npm ci
+VITE_API_BASE_URL=http://127.0.0.1:8000/api npm run dev -- --host localhost
+```
+
+On Windows PowerShell:
 
 ```powershell
 npm ci
@@ -31,32 +58,39 @@ $env:VITE_API_BASE_URL = "http://127.0.0.1:8000/api"
 npm run dev -- --host localhost
 ```
 
-Abra `http://localhost:5173`. Configure a API e CORS de acordo com o ambiente. Use somente dados fictícios nesta demonstração.
+Open `http://localhost:5173`. If `VITE_API_BASE_URL` is not set, the app defaults to `http://127.0.0.1:8000/api`.
 
-Para ter o que explorar, gere a base de demonstração no backend (`python manage.py seed_demo`, veja o README da API) e entre com `admin_demo`, `secretaria_demo`, `professor_demo` ou `responsavel_demo` para ver cada perfil.
+To have data to explore, generate the demo database in the backend (`python manage.py seed_demo`, see the API README) and sign in as `admin_demo`, `secretaria_demo`, `professor_demo` or `responsavel_demo` to see each role.
 
-## Lint e build
+### Lint and build
 
-```powershell
+```bash
 npm run lint
 npm run build
 ```
 
-A integração contínua (GitHub Actions) roda lint, build e `npm audit` a cada push ou pull request para `develop` e `main`.
+### Environment variables
 
-## Deploy da demonstração
-
-O frontend é publicado na Vercel (`vercel.json` já redireciona as rotas do React para o `index.html`). As variáveis de ambiente ficam no painel da Vercel:
-
-| Variável | Uso |
+| Variable | Purpose |
 | --- | --- |
-| `VITE_API_BASE_URL` | Endereço da API, terminando em `/api` |
-| `VITE_DEMO_MODE` | `true` mostra os botões de demonstração e o aviso de dados fictícios |
-| `VITE_DEMO_PASSWORD` | Senha pública das contas de demo (a mesma `DEMO_PASSWORD` da API) |
-| `VITE_DEV_MODE` | `false` em produção |
+| `VITE_API_BASE_URL` | API address, ending in `/api` |
+| `VITE_API_TIMEOUT` | Request timeout in ms (default 60000, to give a free-tier server time to wake up) |
+| `VITE_DEMO_MODE` | `true` shows the one-click demo login buttons and a fictional-data notice |
+| `VITE_DEMO_PASSWORD` | Public password of the demo accounts (same as the API's `DEMO_PASSWORD`) |
+| `VITE_DEV_MODE` | Relaxes CPF/RG validation when `true` (default `true`); set to `false` in production |
 
-O passo a passo completo, junto com a API no Render, está no `DEPLOY.md` do repositório do backend. Não coloque segredos em variáveis `VITE_`: elas vão para o navegador.
+Never put secrets in `VITE_` variables: they are bundled into the browser. See [`.env.production`](.env.production) for the production build defaults.
 
-## Autoria e licença
+## Technical highlights
 
-Copyright (c) 2025 Danielle. Os termos de uso estão em [LICENSE](LICENSE). Uso comercial exige autorização prévia por escrito do titular dos direitos. Não inclua credenciais, dados de alunos ou configurações privadas no repositório.
+- **Role-aware UI, server-side enforcement.** [`src/auth/papeis.ts`](src/auth/papeis.ts) mirrors the backend's permission rules only to hide menus and actions the user cannot use. The API remains the source of truth and enforces access on every endpoint.
+- **Safe token refresh under concurrency.** The backend rotates refresh tokens on every use and blacklists the previous one, so [`src/api/axios.ts`](src/api/axios.ts) stores the new refresh token each time and makes simultaneous failed requests share a single in-flight refresh instead of racing each other.
+- **Feature-based structure.** Each module (`alunos`, `turmas`, `matriculas`, `documentos`, ...) keeps its list, form, detail views and data hook under `src/features/`, with one API service per resource in `src/api/` and shared UI in `src/components/`.
+
+## Deploying the demo
+
+The frontend is published on Vercel; [`vercel.json`](vercel.json) rewrites all routes to `index.html` for client-side routing. Set the environment variables above in the Vercel project settings. The full step-by-step guide, together with deploying the API on Render, is in the backend repository's `DEPLOY.md`.
+
+## License and authorship
+
+Copyright (c) 2025 Danielle. See [LICENSE](LICENSE) for the terms of use. Commercial use requires prior written permission from the copyright holder. Do not add credentials, student data or private configuration to this repository.
